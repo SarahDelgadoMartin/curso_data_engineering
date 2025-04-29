@@ -42,5 +42,5 @@ models:
       +materialized: table
 
 seeds:
-	+database: "ALUMNO30_DEV_BRONZE_DB"
-	+schema: "SEEDS"
+    +database: "ALUMNO30_DEV_BRONZE_DB"
+    +schema: "SEEDS"
