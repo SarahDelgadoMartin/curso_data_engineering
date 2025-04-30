@@ -1,0 +1,12 @@
+version: 2
+
+seeds:
+  - name: personas
+    config:
+      column_types:
+        name: varchar(50)
+        year: int
+        income: varchar(5)
+        education: varchar(50)
+        graduation: date
+      
