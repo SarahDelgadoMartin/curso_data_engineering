@@ -3,6 +3,8 @@ version: 2
 sources:
 
   - name: google_sheets # name of the source 
+    description: >
+      Datos raw provenientes de Google Sheets.
     schema: google_sheets # this is the schema our raw data lives in
     database: ALUMNO30_DEV_BRONZE_DB # this is the name of our database
 
@@ -19,9 +21,33 @@ sources:
 
       - name: budget
         loaded_at_field: _fivetran_synced
+        description: >
+          Datos sobre el objetivo mensual de cada producto.
         columns:
           - name: _row
+            description: >
+              Número de la fila en Google Sheet.
+            tests:
+              - not_null
+              - unique
           - name: product_id
+            description: >
+              Id única para cada p.
+            tests:
+              - not_null
           - name: quantity
+            description: >
+              Número de unidades por cada producto y cada mes por producto. 
+            tests:
+              - not_null
+              - positive_values
           - name: month
+            description: >
+              Cada mes -> Final de mes.
+            tests:
+              - not_null
           - name: _fivetran_synced
+            description: >
+              Fecha en que se cargaron los datos.
+            tests:
+              - not_null

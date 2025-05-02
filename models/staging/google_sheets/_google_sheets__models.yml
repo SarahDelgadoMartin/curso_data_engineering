@@ -1,0 +1,25 @@
+version: 2
+
+models:
+  - name: budget
+    columns:
+      - name: _row
+        tests:
+          - not_null
+          - unique
+      - name: product_id         
+        tests:
+          - not_null
+          - relationships:
+                to: ref('stg_sql_server_dbo__products')
+                field: product_id  
+      - name: quantity
+        tests:
+          - not_null
+          - positive_values    
+      - name: month
+        tests:
+          - not_null
+      - name: date_load
+        tests:
+          - not_null
