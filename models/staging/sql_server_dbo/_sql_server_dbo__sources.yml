@@ -17,31 +17,88 @@ sources:
 
     tables:
       - name: addresses
+        description: >
+          Direcciones de entrega de los pedidos.
         columns:
           - name: address_id
+            description: >
+              Id del registro.
+            tests:
+              - not_null
+              - unique
           - name: zipcode
+            description: >
+              Código postal.
+            tests:
+              - not_null
           - name: country
+            description: >
+              País.
+            tests:
+              - not_null
           - name: address
+            description: >
+              Nombre de la vía y número de la dirección.
+            tests:
+              - not_null
           - name: state
+            description: >
+              Estado.
+            tests:
+              - not_null
           - name: _fivetran_deleted
+            description: >
+               Indica si el registro ha sido borrado en la base de datos de origen.
           - name: _fivetran_synced
+            description: >
+              Fecha en que se cargaron los datos.
+            tests:
+              - not_null
 
       - name: events
+        description: >
+          Direcciones de entrega de los pedidos.
         columns:
           - name: event_id
+            description: >
+              Id del registro.
+            tests:
+              - not_null
+              - unique
           - name: page_url
+            description: >
+              Url de la web visitada por el usuario.
+            tests:
+              - not_null
           - name: event_type
+            description: >
+              Estado.
+            tests:
+              - not_null
+              - accepted_values:
+                values: ['checkout', 'package_shipped', 'add_to_cart', 'page_view']
           - name: user_id
           - name: product_id
           - name: session_id
           - name: created_at
           - name: order_id
           - name: _fivetran_deleted
+            description: >
+               Indica si el registro ha sido borrado en la base de datos de origen.
           - name: _fivetran_synced
+            description: >
+              Fecha en que se cargaron los datos.
+            tests:
+              - not_null
 
       - name: orders
         columns:
           - name: order_id
+            description: >
+              Id del registro.
+            tests:
+              - not_null
+              - unique
           - name: shipping_service
           - name: shipping_cost
           - name: address_id
@@ -55,36 +112,80 @@ sources:
           - name: tracking_id
           - name: status
           - name: _fivetran_deleted
+            description: >
+              Indica si el registro ha sido borrado en la base de datos de origen.
           - name: _fivetran_synced
+            description: >
+              Fecha en que se cargaron los datos.
+            tests:
+              - not_null
 
       - name: order_items
         columns:
           - name: order_id
+            description: >
+              Id del registro.
+            tests:
+              - not_null
+              - unique
           - name: product_id
           - name: quantity
           - name: _fivetran_deleted
+            description: >
+               Indica si el registro ha sido borrado en la base de datos de origen.
           - name: _fivetran_synced
+            description: >
+              Fecha en que se cargaron los datos.
+            tests:
+              - not_null
 
       - name: products
         columns:
           - name: product_id
+            description: >
+              Id del registro.
+            tests:
+              - not_null
+              - unique
           - name: price
           - name: name
           - name: inventory
           - name: _fivetran_deleted
+            description: >
+               Indica si el registro ha sido borrado en la base de datos de origen.
           - name: _fivetran_synced
+            description: >
+              Fecha en que se cargaron los datos.
+            tests:
+              - not_null
 
       - name: promos
         columns:
           - name: promo_id
+            description: >
+              Id del registro.
+            tests:
+              - not_null
+              - unique
           - name: discount
           - name: status
           - name: _fivetran_deleted
+            description: >
+               Indica si el registro ha sido borrado en la base de datos de origen.
           - name: _fivetran_synced
+            description: >
+              Fecha en que se cargaron los datos.
+            tests:
+              - not_null
 
       - name: users
         columns:
           - name: user_id
+            description: >
+              Id del registro.
+            tests:
+              - not_null
+              - unique
           - name: updated_at
           - name: address_id
           - name: last_name
@@ -94,4 +195,10 @@ sources:
           - name: first_name
           - name: email
           - name: _fivetran_deleted
+            description: >
+               Indica si el registro ha sido borrado en la base de datos de origen.
           - name: _fivetran_synced
+            description: >
+              Fecha en que se cargaron los datos.
+            tests:
+              - not_null
