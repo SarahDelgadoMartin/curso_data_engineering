@@ -11,5 +11,3 @@ packages:
     version: 1.0.0
   - package: Snowflake-Labs/dbt_constraints
     version: 1.0.4
-  - package: get-select/dbt_snowflake_monitoring
-    version: 5.4.3

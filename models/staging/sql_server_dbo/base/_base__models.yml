@@ -1,0 +1,13 @@
+version: 2
+
+models:
+  - name: base_sql_server_dbo__products
+    description: >
+      .
+    columns:
+      - name: product_id
+        description: >
+          Id del producto hasheado.
+        tests:
+          - not_null
+          - unique

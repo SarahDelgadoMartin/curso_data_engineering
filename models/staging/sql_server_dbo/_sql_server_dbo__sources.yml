@@ -29,6 +29,7 @@ sources:
           - name: zipcode
             description: >
               Código postal.
+            data_type: number
             tests:
               - not_null
           - name: country
@@ -43,12 +44,12 @@ sources:
               - not_null
           - name: state
             description: >
-              Estado.
+              Estado (Localización).
             tests:
               - not_null
           - name: _fivetran_deleted
             description: >
-               Indica si el registro ha sido borrado en la base de datos de origen.
+              Indica si el registro ha sido borrado en la base de datos de origen.
           - name: _fivetran_synced
             description: >
               Fecha en que se cargaron los datos.
@@ -75,7 +76,7 @@ sources:
               Tipo de evento realizado por el usuario en la web.
             tests:
               - accepted_values:
-                values: ['checkout', 'package_shipped', 'add_to_cart', 'page_view']
+                  values: ['placed', 'shipped', 'completed', 'returned']
           - name: user_id
             description: >
               Id del usuario que realiza el evento.
@@ -125,7 +126,7 @@ sources:
               Servicio de envío asociado al pedido.
             tests:
               - accepted_values:
-                values: ['ups', 'usps', 'dhl', 'fedex', '']
+                  values: ['ups', 'usps', 'dhl', 'fedex', '']
           - name: shipping_cost
             description: >
               Precio del servicio de envío asociado al pedido.
@@ -177,7 +178,7 @@ sources:
               Id para el seguimiento del pedido.
             tests:
               - accepted_values:
-                values: ['delivered', 'preparing', 'shipped']
+                  values: ['delivered', 'preparing', 'shipped']
           - name: _fivetran_deleted
             description: >
               Indica si el registro ha sido borrado en la base de datos de origen.
@@ -269,7 +270,7 @@ sources:
               Estado de la promoción.
             tests:
               - accepted_values:
-                values: ['inactive', 'active']
+                  values: ['inactive', 'active']
           - name: _fivetran_deleted
             description: >
                Indica si el registro ha sido borrado en la base de datos de origen.
