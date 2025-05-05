@@ -57,7 +57,7 @@ sources:
 
       - name: events
         description: >
-          Direcciones de entrega de los pedidos.
+          Eventos realizados por un usuario en la web relacionados con los productos.
         columns:
           - name: event_id
             description: >
@@ -67,21 +67,40 @@ sources:
               - unique
           - name: page_url
             description: >
-              Url de la web visitada por el usuario.
+              Url de la sección de la web visitada por el usuario.
             tests:
               - not_null
           - name: event_type
             description: >
-              Estado.
+              Tipo de evento realizado por el usuario en la web.
             tests:
-              - not_null
               - accepted_values:
                 values: ['checkout', 'package_shipped', 'add_to_cart', 'page_view']
           - name: user_id
+            description: >
+              Id del usuario que realiza el evento.
+            tests:
+              - not_null
           - name: product_id
+            description: >
+              Id del producto para el que está realizando el evento el usuario.
+            tests:
+              - not_null
           - name: session_id
+            description: >
+              Id de la sesión que une los diferentes eventos realizados por el usuario.
+            tests:
+              - not_null
           - name: created_at
+            description: >
+              Fecha en la que se añadió el registro a la tabla.
+            tests:
+              - not_null
           - name: order_id
+            description: >
+              Id de la orden del producto en caso de que el usuario lo haya comprado.
+            tests:
+              - not_null
           - name: _fivetran_deleted
             description: >
                Indica si el registro ha sido borrado en la base de datos de origen.
@@ -92,25 +111,73 @@ sources:
               - not_null
 
       - name: orders
+        description: >
+          Pedidos realizados por un usuario.
         columns:
           - name: order_id
             description: >
-              Id del registro.
+              Id de la orden.
             tests:
               - not_null
               - unique
           - name: shipping_service
+            description: >
+              Servicio de envío asociado al pedido.
+            tests:
+              - accepted_values:
+                values: ['ups', 'usps', 'dhl', 'fedex', '']
           - name: shipping_cost
+            description: >
+              Precio del servicio de envío asociado al pedido.
+            tests:
+              - not_null
           - name: address_id
+            description: >
+              Id de la dirección del usuario a la que se realiza el envío.
+            tests:
+              - not_null
           - name: created_at
+            description: >
+              Fecha en la que se añadió el registro a la tabla.
+            tests:
+              - not_null
           - name: promo_id
+            description: >
+              Id de la promoción que se le aplica al pedido.
+            tests:
+              - not_null
           - name: estimated_delivery_at
+            description: >
+              Fecha estimada de entrega del pedido.
           - name: order_cost
+            description: >
+              Precio total de los productos del pedido antes de añadir coste de envío y aplicar promoción.
+            tests:
+              - not_null
           - name: user_id
+            description: >
+              Id del usuario que realiza el pedido.
+            tests:
+              - not_null
           - name: order_total
+            description: >
+              Precio total del pedido después de añadir coste de envío y aplicar promoción.
+            tests:
+              - not_null
           - name: delivered_at_timestamp
+            description: >
+              Fecha de entrega del pedido.
           - name: tracking_id
+            description: >
+              Id para el seguimiento del pedido.
+            tests:
+              - not_null
           - name: status
+            description: >
+              Id para el seguimiento del pedido.
+            tests:
+              - accepted_values:
+                values: ['delivered', 'preparing', 'shipped']
           - name: _fivetran_deleted
             description: >
               Indica si el registro ha sido borrado en la base de datos de origen.
@@ -121,15 +188,24 @@ sources:
               - not_null
 
       - name: order_items
+        description: >
+          Productos asociados a cada pedido de la tabla orders.
         columns:
           - name: order_id
             description: >
-              Id del registro.
+              Id del pedido asociado.
             tests:
               - not_null
-              - unique
           - name: product_id
+            description: >
+              Id del producto.
+            tests:
+              - not_null
           - name: quantity
+            description: >
+              Unidades de producto asociadas al pedido.
+            tests:
+              - not_null
           - name: _fivetran_deleted
             description: >
                Indica si el registro ha sido borrado en la base de datos de origen.
@@ -140,16 +216,30 @@ sources:
               - not_null
 
       - name: products
+        description: >
+              Copnjunto de productos disponibles.
         columns:
           - name: product_id
             description: >
-              Id del registro.
+              Id del producto.
             tests:
               - not_null
               - unique
           - name: price
+            description: >
+              Precio del producto.
+            tests:
+              - not_null
           - name: name
+            description: >
+              Nombre del producto.
+            tests:
+              - not_null
           - name: inventory
+            description: >
+              Cantidad de producto disponible.
+            tests:
+              - not_null
           - name: _fivetran_deleted
             description: >
                Indica si el registro ha sido borrado en la base de datos de origen.
@@ -160,15 +250,26 @@ sources:
               - not_null
 
       - name: promos
+        description: >
+              Tipo de descuentos.
         columns:
           - name: promo_id
             description: >
-              Id del registro.
+              Id de la promoción.
             tests:
               - not_null
               - unique
           - name: discount
+            description: >
+              Cantidad en unidad de descuento de la promoción.
+            tests:
+              - not_null
           - name: status
+            description: >
+              Estado de la promoción.
+            tests:
+              - accepted_values:
+                values: ['inactive', 'active']
           - name: _fivetran_deleted
             description: >
                Indica si el registro ha sido borrado en la base de datos de origen.
@@ -179,21 +280,53 @@ sources:
               - not_null
 
       - name: users
+        description: >
+              Usuarios de la web.
         columns:
           - name: user_id
             description: >
-              Id del registro.
+              Id del usuario.
             tests:
               - not_null
               - unique
           - name: updated_at
+            description: >
+              Fecha de la última actualización de los datos del usuario.
+            tests:
+              - not null
           - name: address_id
+            description: >
+              Id de la dirección del usuario.
+            tests:
+              - not null
           - name: last_name
+            description: >
+              Apellido del usuario.
+            tests:
+              - not null
           - name: created_at
+            description: >
+              Fecha de creación del registro.
+            tests:
+              - not null
           - name: phone_number
+            description: >
+              Número de teléfono del usuario.
+            tests:
+              - not null
           - name: total_orders
+            description: >
+              Total de pedidos realizados por el usuario.
           - name: first_name
+            description: >
+              Nombre del usuario.
+            tests:
+              - not null
           - name: email
+            description: >
+              Correo electrónico del usuario.
+            tests:
+              - not null
           - name: _fivetran_deleted
             description: >
                Indica si el registro ha sido borrado en la base de datos de origen.
