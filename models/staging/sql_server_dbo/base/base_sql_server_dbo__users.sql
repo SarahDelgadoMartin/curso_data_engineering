@@ -6,7 +6,7 @@
 
 WITH src_promos AS (
     SELECT * 
-    FROM {{ source('sql_server_dbo', 'products') }}
+    FROM {{ source('sql_server_dbo', 'users') }}
     ),
 
 renamed_casted AS (

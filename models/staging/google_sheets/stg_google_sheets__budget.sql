@@ -1,4 +1,3 @@
-
 {{
   config(
     materialized='view'
@@ -7,16 +6,17 @@
 
 WITH src_budget AS (
     SELECT * 
-    FROM {{ source('google_sheets', 'budget') }}
+    FROM {{ ref('base_google_sheets__budget') }}
     ),
 
 renamed_casted AS (
     SELECT
-          _row
-        , product_id
-        , quantity
-        , month
-        , _fivetran_synced AS date_load
+        budget_id AS budget_id,
+        product_id AS product_id,
+        target_quantity AS target_quantity,
+        MONTH(date) AS month,
+        YEAR(date) AS year,
+        date_load AS date_load
     FROM src_budget
     )
 
