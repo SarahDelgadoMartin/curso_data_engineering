@@ -17,13 +17,7 @@ packages:
   - name: dbt_constraints
     package: Snowflake-Labs/dbt_constraints
     version: 1.0.4
-  - name: dbt_snowflake_monitoring
-    package: get-select/dbt_snowflake_monitoring
-    version: 5.4.3
   - name: dbt_date
     package: calogica/dbt_date
     version: 0.10.1
-  - name: dbt_snowflake_query_tags
-    package: get-select/dbt_snowflake_query_tags
-    version: 2.5.0
-sha1_hash: f67165a9ba3d2bbc6123c83769438b9cfbb39b23
+sha1_hash: 322577628978f5408ac29afd46a6cce721191e91
