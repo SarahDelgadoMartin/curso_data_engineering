@@ -22,9 +22,10 @@ models:
         tests:
           - not_null
           - positive_values
-      - name: month
+      - name: date
+        data_type: date
         description: >
-          Mes asociado a cada objetivo.
+          Fecha asociada a cada objetivo, referencia al úlitmo día de cada mes.
         tests:
           - not_null
       - name: date_load
