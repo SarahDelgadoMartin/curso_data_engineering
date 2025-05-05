@@ -1,0 +1,34 @@
+version: 2
+
+models:
+  - name: base_google_sheets__budget
+    description: >
+      Esta tabla base contiene información limpia y estandarizada del presupuesto/objetivo del mes.
+    columns:
+      - name: budget_id
+        description: >
+          Id del registro hasheado.
+        tests:
+          - not_null
+          - unique
+      - name: product_id
+        description: >
+          Id única para cada producto.
+        tests:
+          - not_null  
+      - name: target_quantity
+        description: >
+          Número de unidades por cada producto y cada mes por producto. 
+        tests:
+          - not_null
+          - positive_values
+      - name: month
+        description: >
+          Mes asociado a cada objetivo.
+        tests:
+          - not_null
+      - name: date_load
+        description: >
+          Fecha en que se cargaron los datos.
+        tests:
+          - not_null

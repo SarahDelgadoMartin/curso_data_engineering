@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: budget
+  - name: stg_google_sheets__budget
     columns:
       - name: _row
         tests:
@@ -11,7 +11,7 @@ models:
         tests:
           - not_null
           - relationships:
-                to: ref('stg_sql_server_dbo__products')
+                to: ref('base_sql_server_dbo__products')
                 field: product_id  
       - name: quantity
         tests:
