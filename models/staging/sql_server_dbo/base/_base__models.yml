@@ -1,6 +1,12 @@
 version: 2
 
 models:
+  - name: promos
+    description: >
+      
+    columns:
+      - name: promo_id
+
   - name: base_sql_server_dbo__products
     description: >
       .
