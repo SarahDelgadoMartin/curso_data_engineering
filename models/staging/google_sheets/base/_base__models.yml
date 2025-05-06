@@ -6,17 +6,23 @@ models:
       Esta tabla base contiene información limpia y estandarizada del presupuesto/objetivo del mes.
     columns:
       - name: budget_id
+        data_type: varchar
         description: >
           Id del registro hasheado.
         tests:
           - not_null
           - unique
       - name: product_id
+        data_type: varchar
         description: >
           Id única para cada producto.
         tests:
-          - not_null  
+          - not_null
+          - relationships:
+              field: products
+              to: ref('base_sql_sheets_dbo__products')
       - name: target_quantity
+        data_type: int
         description: >
           Número de unidades por cada producto y cada mes por producto. 
         tests:
@@ -29,6 +35,7 @@ models:
         tests:
           - not_null
       - name: date_load
+        data_type: date
         description: >
           Fecha en que se cargaron los datos.
         tests:
