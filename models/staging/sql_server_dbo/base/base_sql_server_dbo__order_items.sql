@@ -11,12 +11,11 @@ WITH src_order_items AS (
 
 renamed_casted AS (
     SELECT
-        dbt_utils.generate_surrogate_key(['order_id', 'product_id') AS order_items_id,
-        CAST(price AS FLOAT) AS price,
-        CAST(name AS VARCHAR(256)) AS name,
+        {{ dbt_utils.generate_surrogate_key(['order_id', 'product_id']) }} AS order_items_id,
+
         CAST(inventory AS INT) AS inventory,
-        CAST(CONVERT_TIMEZONE('Europe/Madrid', 'UTC', _fivetran_deleted) AS DATE) AS date_delete,
-        CAST(CONVERT_TIMEZONE('Europe/Madrid', 'UTC', _fivetran_synced) AS DATE) AS date_load
+        CAST(_fivetran_deleted AS BOOLEAN) AS is_delete,
+        CONVERT_TIMEZONE('UTC', CAST(_fivetran_synced AS TIMESTAMP_TZ)) AS date_load
     FROM src_order_items
     )   
 

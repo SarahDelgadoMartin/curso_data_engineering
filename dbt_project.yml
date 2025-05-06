@@ -40,6 +40,10 @@ models:
     # Applies to all files under models/example/
     staging:
       +materialized: view
+      google_sheets:
+        +schema: 'google_sheets'
+      sql_server_dbo:
+        +schema: 'sql_server_dbo'
     marts:
       +materialized: table
 

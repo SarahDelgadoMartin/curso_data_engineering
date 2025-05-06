@@ -11,12 +11,12 @@ WITH src_budget AS (
 
 renamed_casted AS (
     SELECT
-        budget_id AS budget_id,
-        product_id AS product_id,
-        target_quantity AS target_quantity,
+        budget_id,
+        product_id,
+        target_quantity,
         MONTH(date) AS month,
         YEAR(date) AS year,
-        date_load AS date_load
+        date_load
     FROM src_budget
     )
 
