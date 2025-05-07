@@ -1,4 +1,4 @@
-{{ config(
+ {{ config(
     materialized='incremental',
     unique_key = '_row'
     ) 
@@ -10,7 +10,7 @@ WITH stg_budget_products AS (
 
 {% if is_incremental() %}
 
-	  WHERE _fivetran_synced > (SELECT MAX(_fivetran_synced) FROM {{ this }} )
+	WHERE _fivetran_synced > (SELECT MAX(date_load) FROM {{ this }} )
 
 {% endif %}
     ),
@@ -24,5 +24,5 @@ renamed_casted AS (
         CONVERT_TIMEZONE('UTC', CAST(_fivetran_synced AS DATE)) AS date_load
     FROM stg_budget_products
     )
-
-SELECT * FROM renamed_casted
+  
+SELECT * FROM renamed_casted 
