@@ -15,7 +15,7 @@ renamed_casted AS (
         {{ dbt_utils.generate_surrogate_key(['order_id']) }} AS order_id,
         {{ dbt_utils.generate_surrogate_key(['product_id']) }} AS product_id,
         CAST(quantity AS INT) AS total_quantity,
-        CAST(_fivetran_deleted AS BOOLEAN) AS is_delete,
+        CAST(IFNULL(FALSE, _fivetran_deleted) AS BOOLEAN) AS is_delete,
         CONVERT_TIMEZONE('UTC', CAST(_fivetran_synced AS TIMESTAMP_TZ)) AS date_load
     FROM src_order_items
     )   

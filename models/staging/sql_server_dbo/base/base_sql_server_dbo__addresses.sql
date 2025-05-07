@@ -17,7 +17,7 @@ renamed_casted AS (
         CAST(zipcode AS INT) AS zipcode,
         CAST(state AS VARCHAR(256)) AS state,
         CAST(country AS VARCHAR(256)) AS country,
-        CAST(_fivetran_deleted AS BOOLEAN) AS is_delete,
+        CAST(IFNULL(FALSE, _fivetran_deleted) AS BOOLEAN) AS is_delete,
         CONVERT_TIMEZONE('UTC', CAST(_fivetran_synced AS TIMESTAMP_TZ)) AS date_load
     FROM src_addresses
     )   
