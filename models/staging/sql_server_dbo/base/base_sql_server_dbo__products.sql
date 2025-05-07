@@ -1,12 +1,18 @@
 {{
   config(
-    materialized='view'
+    materialized='incremental'
   )
 }}
 
 WITH src_products AS (
     SELECT * 
     FROM {{ source('sql_server_dbo', 'products') }}
+
+    {% if is_incremental() %}
+
+	WHERE _fivetran_synced > (SELECT MAX(date_load) FROM {{ this }} )
+
+    {% endif %}
     ),
 
 renamed_casted AS (
@@ -18,18 +24,6 @@ renamed_casted AS (
         CAST(IFNULL(FALSE, _fivetran_deleted) AS BOOLEAN) AS is_delete,
         CONVERT_TIMEZONE('UTC', CAST(_fivetran_synced AS TIMESTAMP_TZ)) AS date_load
     FROM src_products
-    ),
-
-new_row AS (
-    SELECT
-       {{ dbt.hash(["no product"]) }} AS product_id,
-       0.0 AS price,
-       'no product' AS name,
-       0 AS inventory,
-       FALSE AS is_delete,
-       CONVERT_TIMEZONE('UTC', CURRENT_TIMESTAMP()) AS date_load
-)    
+    )
 
 SELECT * FROM renamed_casted
-UNION ALL
-SELECT * FROM new_row

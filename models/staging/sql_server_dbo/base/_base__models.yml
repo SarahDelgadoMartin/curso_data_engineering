@@ -6,18 +6,22 @@ models:
       Direcciones de entrega de los pedidos.
     columns:
       - name: address_id
-        description: >
-          Id del registro.
         tests:
           - not_null
           - unique
+        data_type: varchar
+        constraints:
+          - type: not_null
+        description: >
+          Id del registro hasheado.   
       - name: zipcode
+        data_type: int
         description: >
           Código postal.
-        data_type: number
         tests:
           - not_null
       - name: country
+        data_type: varchar
         description: >
           País.
         tests:
