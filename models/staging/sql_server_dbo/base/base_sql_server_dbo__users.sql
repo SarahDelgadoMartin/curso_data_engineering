@@ -18,11 +18,11 @@ WITH src_users AS (
 renamed_casted AS (
     SELECT
         {{ dbt_utils.generate_surrogate_key(['user_id']) }} AS user_id,
-        CAST(last_name AS VARCHAR(256)) AS last_name,
-        CAST(first_name AS VARCHAR(256)) AS first_name,
+        CAST(last_name AS VARCHAR) AS last_name,
+        CAST(first_name AS VARCHAR) AS first_name,
         {{ dbt_utils.generate_surrogate_key(['address_id']) }} AS address_id,
-        CAST(REPLACE(phone_number, '-', '') AS INT) AS phone_number,
-        CAST(email AS VARCHAR(256)) AS email,
+        CAST(phone_number AS VARCHAR) AS phone_number,
+        CAST(email AS VARCHAR) AS email,
         CONVERT_TIMEZONE(
             'UTC',
             CAST(IFNULL(
