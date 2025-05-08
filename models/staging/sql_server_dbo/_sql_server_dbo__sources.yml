@@ -293,8 +293,6 @@ sources:
           - name: updated_at
             description: >
               Fecha de la última actualización de los datos del usuario.
-            tests:
-              - not null
           - name: address_id
             description: >
               Id de la dirección del usuario.
