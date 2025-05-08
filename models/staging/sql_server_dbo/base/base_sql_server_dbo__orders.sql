@@ -24,7 +24,7 @@ renamed_casted AS (
         CAST(status AS VARCHAR) AS order_status,
         CAST(REPLACE(REPLACE(order_cost, ',', '.'), ' ', '') AS FLOAT) AS order_cost,
         CASE promo_id
-            WHEN '' THEN {{dbt.hash(["no promo"])}}
+            WHEN '' THEN {{ dbt_utils.generate_surrogate_key(["'no promo'"]) }}
             ELSE {{ dbt_utils.generate_surrogate_key(['promo_id']) }}
         END AS promo_id,
         CAST(REPLACE(REPLACE(shipping_cost, ',', '.'), ' ', '') AS FLOAT) AS shipping_cost,
