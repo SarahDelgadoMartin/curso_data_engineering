@@ -3,7 +3,7 @@ version: 2
 sources:
   - name: sql_server_dbo # name of the source
     schema: sql_server_dbo # this is the schema our raw data lives in
-    database: ALUMNO30_DEV_BRONZE_DB # this is the name of our database
+    database: "{{ env_var('DBT_ENVIRONMENTS') }}_BRONZE_DB" # this is the name of our database
 
     quoting:
       database: false
