@@ -1,4 +1,4 @@
-{% snapshot budget_snapshot_s_timestamp %}
+    {% snapshot budget_snapshot_s_timestamp %}
 
 {{
     config(
