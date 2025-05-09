@@ -3,17 +3,17 @@
     materialized='incremental',
     enabled=false
   )
-}}
+    }}
 
 WITH src_orders AS (
     SELECT * 
     FROM {{ source('sql_server_dbo', 'orders') }}
  
-{% if is_incremental() %}
+    {% if is_incremental() %}
 
 	WHERE _fivetran_synced > (SELECT MAX(date_load) FROM {{ this }} )
 
-{% endif %}
+    {% endif %}
     ),
 
 renamed_casted AS (
@@ -66,15 +66,6 @@ renamed_casted AS (
         CAST(IFNULL(FALSE, _fivetran_deleted) AS BOOLEAN) AS is_delete,
         CONVERT_TIMEZONE('UTC', CAST(_fivetran_synced AS TIMESTAMP_TZ)) AS date_load
     FROM src_orders
-    ),
-
-new_row AS (
-    SELECT
-       {{ dbt.hash(["no order"]) }} AS promo_id,
-       CONVERT_TIMEZONE('UTC', CURRENT_TIMESTAMP()) AS date_load
-
-)    
+    )
 
 SELECT * FROM renamed_casted
-UNION ALL
-SELECT * FROM new_row

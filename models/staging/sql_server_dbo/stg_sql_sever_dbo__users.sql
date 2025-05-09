@@ -2,45 +2,42 @@
   config(
     materialized='incremental'
   )
-}}
+    }}
 
-WITH src_users AS (
+WITH base_users AS (
     SELECT * 
-    FROM {{ source('sql_server_dbo', 'users') }}
-{% if is_incremental() %}
+    FROM {{ ref('base_sql_server_dbo__users') }}
+    
+    {% if is_incremental() %}
 
 	WHERE _fivetran_synced > (SELECT MAX(date_load) FROM {{ this }} )
 
-{% endif %}
-),
+    {% endif %}
+    ),
 
 renamed_casted AS (
     SELECT
-        {{ dbt_utils.generate_surrogate_key(['user_id']) }} AS user_id,
-        CAST(last_name AS VARCHAR(256)) AS last_name,
-        CAST(first_name AS VARCHAR(256)) AS first_name,
-        {{ dbt_utils.generate_surrogate_key(['address_id']) }} AS address_id,
-        CAST(REPLACE(phone_number, '-', '') AS INT) AS phone_number,
-        CAST(email AS VARCHAR(256)) AS email,
-        CONVERT_TIMEZONE(
-            'UTC',
-            CAST(IFNULL(
-                    CAST('9999-12-31 23:59:59' AS TIMESTAMP_TZ),
-                    created_at
-                    ) AS TIMESTAMP_TZ
-                )
-            ) AS created_at,
-        CONVERT_TIMEZONE(
-            'UTC',
-            CAST(IFNULL(
-                    CAST('9999-12-31 23:59:59' AS TIMESTAMP_TZ),
-                    updated_at
-                    ) AS TIMESTAMP_TZ
-                )
-            ) AS updated_at,
-        CAST(IFNULL(FALSE, _fivetran_deleted) AS BOOLEAN) AS is_delete,
-        CONVERT_TIMEZONE('UTC', CAST(_fivetran_synced AS TIMESTAMP_TZ)) AS date_load
-    FROM src_users
+        user_id,
+        last_name,
+        first_name,
+        address_id,
+        phone_number,
+        CAST(CASE
+              WHEN REGEXP_LIKE(phone_number, '^[0-9]{3}-[0-9]{3}-[0-9]{4}$') THEN TRUE
+              ELSE FALSE
+            END AS BOOLEAN) AS is_valid_us_phone,
+        email,
+        CAST(CASE
+              WHEN REGEXP_LIKE(email, '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$') THEN TRUE
+              ELSE FALSE
+            END AS BOOLEAN) AS is_valid_email,
+        DATE(created_at) AS created_date_at,
+        TIME(created_at) AS created_time_at,
+        DATE(updated_at) AS updated_date_at,
+        TIME(updated_at) AS updated_time_at,
+        is_delete,
+        date_load
+    FROM base_users
     )   
 
 SELECT * FROM renamed_casted

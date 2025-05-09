@@ -2,7 +2,7 @@
   config(
     materialized='view'
   )
-}}
+    }}
 
 WITH src_budget AS (
     SELECT * 

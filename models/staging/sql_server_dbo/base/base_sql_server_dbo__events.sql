@@ -1,7 +1,7 @@
 {{
   config(
     materialized='incremental'
-    )
+  )
     }}
 
 WITH src_events AS (
@@ -18,23 +18,25 @@ WITH src_events AS (
 renamed_casted AS (
     SELECT
         {{ dbt_utils.generate_surrogate_key(['event_id']) }} AS event_id,
-        CAST(page_url AS VARCHAR),
-        CAST(event_type AS VARCHAR),
+        CAST(page_url AS VARCHAR) AS page_url,
+        CAST(event_type AS VARCHAR) AS event_type,
         {{ dbt_utils.generate_surrogate_key(['user_id']) }} AS user_id,
         CASE 
-            WHEN product_id != '' THEN {{ dbt_utils.generate_surrogate_key(['product_id']) }}
+            WHEN product_id != '' THEN {{ dbt_utils.generate_surrogate_key(['product_id']) }} 
         END AS product_id,
         {{ dbt_utils.generate_surrogate_key(['session_id']) }} AS session_id,
         CONVERT_TIMEZONE(
             'UTC',
             CAST(IFNULL(
-                    CAST('9999-12-31 23:59:59' AS TIMESTAMP_TZ),
-                    created_at
+                    created_at,
+                    CAST('9999-12-31 23:59:59' AS TIMESTAMP_TZ)
                     ) AS TIMESTAMP_TZ
                 )
             ) AS created_at,
-        {{ dbt_utils.generate_surrogate_key(['order_id']) }} AS order_id,
-        CAST(IFNULL(FALSE, _fivetran_deleted) AS BOOLEAN) AS is_delete,
+        CASE 
+            WHEN order_id != '' THEN {{ dbt_utils.generate_surrogate_key(['order_id']) }}
+        END AS order_id,
+        CAST(IFNULL(_fivetran_deleted, FALSE) AS BOOLEAN) AS is_delete,
         CONVERT_TIMEZONE('UTC', CAST(_fivetran_synced AS TIMESTAMP_TZ)) AS date_load
     FROM src_events
     )   

@@ -2,7 +2,7 @@
   config(
     materialized='incremental'
   )
-}}
+    }}
 
 WITH src_promos AS (
     SELECT * 
@@ -32,7 +32,7 @@ renamed_casted AS (
         CAST(CASE status
             WHEN 'inactive' THEN FALSE
             WHEN 'active' THEN TRUE
-        END AS BOOLEAN) AS status,
+        END AS BOOLEAN) AS is_active,
         CAST(IFNULL(FALSE, _fivetran_deleted) AS BOOLEAN) AS is_delete,
         CONVERT_TIMEZONE('UTC', CAST(_fivetran_synced AS TIMESTAMP_TZ)) AS date_load
     FROM src_promos
