@@ -2,7 +2,7 @@
   config(
     materialized='incremental'
   )
-}}
+    }}
 
 WITH src_users AS (
     SELECT * 
@@ -26,20 +26,20 @@ renamed_casted AS (
         CONVERT_TIMEZONE(
             'UTC',
             CAST(IFNULL(
-                    CAST('9999-12-31 23:59:59' AS TIMESTAMP_TZ),
-                    created_at
+                    created_at,
+                    CAST('9999-12-31 23:59:59' AS TIMESTAMP_TZ)
                     ) AS TIMESTAMP_TZ
                 )
             ) AS created_at,
         CONVERT_TIMEZONE(
             'UTC',
             CAST(IFNULL(
-                    CAST('9999-12-31 23:59:59' AS TIMESTAMP_TZ),
-                    updated_at
+                    updated_at,
+                    CAST('9999-12-31 23:59:59' AS TIMESTAMP_TZ)
                     ) AS TIMESTAMP_TZ
                 )
             ) AS updated_at,
-        CAST(IFNULL(FALSE, _fivetran_deleted) AS BOOLEAN) AS is_delete,
+        CAST(IFNULL(_fivetran_deleted, FALSE) AS BOOLEAN) AS is_delete,
         CONVERT_TIMEZONE('UTC', CAST(_fivetran_synced AS TIMESTAMP_TZ)) AS date_load
     FROM src_users
     )   

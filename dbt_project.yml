@@ -50,11 +50,18 @@ models:
       +database: "{{ env_var('DBT_ENVIRONMENTS') }}_GOLD_DB"
       core:
         +schema: core
+      products:
+        +schema: products
+      marketing:
+        +schema: marketing
 
 seeds:
   +schema: seed_data
-  +database: "{{ env_var('DBT_ENVIRONMENTS') }}_BRONZE_DB"        
+  +database: "{{ env_var('DBT_ENVIRONMENTS') }}_BRONZE_DB"
+      
 snapshots:
   +transient: false
   +target_database: "{{ env_var('DBT_ENVIRONMENTS') }}_SILVER_DB"
   +target_schema: snapshots
+
+on-run-start: "alter session set timezone = 'UTC';"

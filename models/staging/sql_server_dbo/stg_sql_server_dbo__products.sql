@@ -2,7 +2,7 @@
   config(
     materialized='incremental'
   )
-}}
+    }}
 
 WITH src_products AS (
     SELECT * 
@@ -21,7 +21,7 @@ renamed_casted AS (
         CAST(REPLACE(REPLACE(price, ',', '.'), ' ', '') AS FLOAT) AS price,
         CAST(name AS VARCHAR(256)) AS name,
         CAST(inventory AS INT) AS inventory,
-        CAST(IFNULL(FALSE, _fivetran_deleted) AS BOOLEAN) AS is_delete,
+        CAST(IFNULL(_fivetran_deleted, FALSE) AS BOOLEAN) AS is_delete,
         CONVERT_TIMEZONE('UTC', CAST(_fivetran_synced AS TIMESTAMP_TZ)) AS date_load
     FROM src_products
     )
