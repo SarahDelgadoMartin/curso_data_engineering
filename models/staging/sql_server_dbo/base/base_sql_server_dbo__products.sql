@@ -4,26 +4,26 @@
   )
     }}
 
-WITH src_order_items AS (
+WITH src_products AS (
     SELECT * 
-    FROM {{ source('sql_server_dbo', 'order_items') }}
+    FROM {{ source('sql_server_dbo', 'products') }}
 
     {% if is_incremental() %}
 
 	WHERE _fivetran_synced > (SELECT MAX(date_load) FROM {{ this }} )
-    
+
     {% endif %}
     ),
 
 renamed_casted AS (
     SELECT
-        {{ dbt_utils.generate_surrogate_key(['order_id', 'product_id']) }} AS order_items_id,
-        {{ dbt_utils.generate_surrogate_key(['order_id']) }} AS order_id,
         {{ dbt_utils.generate_surrogate_key(['product_id']) }} AS product_id,
-        CAST(quantity AS INT) AS total_quantity,
+        CAST(REPLACE(REPLACE(price, ',', '.'), ' ', '') AS FLOAT) AS price,
+        CAST(name AS VARCHAR(256)) AS name,
+        CAST(inventory AS INT) AS inventory,
         CAST(IFNULL(_fivetran_deleted, FALSE) AS BOOLEAN) AS is_delete,
         CONVERT_TIMEZONE('UTC', CAST(_fivetran_synced AS TIMESTAMP_TZ)) AS date_load
-    FROM src_order_items
+    FROM src_products
     )
 
 SELECT * FROM renamed_casted
