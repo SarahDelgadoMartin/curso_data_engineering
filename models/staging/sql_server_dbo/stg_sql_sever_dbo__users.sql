@@ -10,7 +10,7 @@ WITH base_users AS (
     
     {% if is_incremental() %}
 
-	WHERE _fivetran_synced > (SELECT MAX(date_load) FROM {{ this }} )
+	WHERE date_load > (SELECT MAX(date_load) FROM {{ this }} )
 
     {% endif %}
     ),

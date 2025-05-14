@@ -1,7 +1,6 @@
--{{
+{{
   config(
-    materialized='incremental',
-    enabled=false
+    materialized='incremental'
   )
     }}
 
@@ -21,7 +20,7 @@ renamed_casted AS (
         {{ dbt_utils.generate_surrogate_key(['order_id']) }} AS order_id,
         {{ dbt_utils.generate_surrogate_key(['user_id']) }} AS user_id,
         {{ dbt_utils.generate_surrogate_key(['address_id']) }} AS address_id,
-        CAST(status AS VARCHAR) AS order_status,
+        CAST(status AS VARCHAR) AS status,
         CAST(REPLACE(REPLACE(order_cost, ',', '.'), ' ', '') AS FLOAT) AS order_cost,
         CASE promo_id
             WHEN '' THEN {{ dbt_utils.generate_surrogate_key(["'no promo'"]) }}
@@ -40,8 +39,8 @@ renamed_casted AS (
         CONVERT_TIMEZONE(
             'UTC',
             CAST(IFNULL(
-                    CAST('9999-12-31 23:59:59' AS TIMESTAMP_TZ),
-                    estimated_delivery_at
+                    estimated_delivery_at,
+                    CAST('9999-12-31 23:59:59' AS TIMESTAMP_TZ)
                     ) AS TIMESTAMP_TZ
                 )
             ) AS estimated_delivery_at,
@@ -49,8 +48,8 @@ renamed_casted AS (
             'UTC',
             CAST(
                 IFNULL(
-                    CAST('9999-12-31 23:59:59' AS TIMESTAMP_TZ),
-                    delivered_at
+                    delivered_at,
+                    CAST('9999-12-31 23:59:59' AS TIMESTAMP_TZ)
                     ) AS TIMESTAMP_TZ
                 )
             ) AS delivered_at,
@@ -58,12 +57,12 @@ renamed_casted AS (
             'UTC',
             CAST(
                 IFNULL(
-                    CAST('9999-12-31 23:59:59' AS TIMESTAMP_TZ),
-                    created_at
+                    created_at,
+                    CAST('9999-12-31 23:59:59' AS TIMESTAMP_TZ)
                     ) AS TIMESTAMP_TZ
                 )
             ) AS created_at,
-        CAST(IFNULL(FALSE, _fivetran_deleted) AS BOOLEAN) AS is_delete,
+        CAST(IFNULL(_fivetran_deleted, FALSE) AS BOOLEAN) AS is_delete,
         CONVERT_TIMEZONE('UTC', CAST(_fivetran_synced AS TIMESTAMP_TZ)) AS date_load
     FROM src_orders
     )
