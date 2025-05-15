@@ -1,12 +1,18 @@
 version: 2
 
 seeds:
-  - name: personas
-    config:
-      column_types:
-        name: varchar(50)
-        year: int
-        income: varchar(5)
-        education: varchar(50)
-        graduation: date
-      
+  - name: zipcode_data
+    description: Códigos postales con latitud, longitud, ciudad, codigo de estado y población.
+    columns:
+      - name: zipcode
+        description: Código postal en formato string
+      - name: city
+        description: Ciudad correspondiente al código postal.
+      - name: state
+        description: Código del estado correspondiente al código postal.
+      - name: lat
+        description: Latitud aproximada del código postal.
+      - name: lng
+        description: Longitud aproximada del código postal.
+      - name: population
+        description: Habitantes estimados del área del código postal.
