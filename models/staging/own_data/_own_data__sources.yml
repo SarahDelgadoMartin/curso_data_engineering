@@ -1,0 +1,48 @@
+version: 2
+
+sources:
+  - name: own_data # name of the source
+    schema: own_data # this is the schema our raw data lives in
+    database: "{{ env_var('DBT_ENVIRONMENTS') }}_BRONZE_DB" # this is the name of our database
+
+    quoting:
+      database: false
+      schema: false
+      identifier: false
+
+    tables:
+      - name: zipcode_data
+        description: >
+          Información correspondiente a cada código postal.
+        columns:
+          - name: zipcode
+            description: >
+              Código postal en versión de 5 dígitos.
+            tests:
+              - not_null
+              - unique
+          - name: city
+            description: >
+              Nombre de la ciudad asociada al código postal.
+            tests:
+              - not_null
+          - name: state_code
+            description: >
+              Código del estado.
+            tests:
+              - not_null
+          - name: latitude
+            description: >
+              Latitud aproximada del área correspondiente al código postal.
+            tests:
+              - not_null
+          - name: longitude
+            description: >
+              Latitud aproximada del área correspondiente al código postal.
+            tests:
+              - not_null
+          - name: population
+            description: >
+              Población aproximada del área correspondiente al código postal.
+            tests:
+              - not_null
