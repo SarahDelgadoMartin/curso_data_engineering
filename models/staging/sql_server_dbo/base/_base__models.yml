@@ -2,93 +2,178 @@ version: 2
 
 models:
   - name: base_sql_server_dbo__addresses
+    config:
+      contract:
+        enforced: true
     description: >
       Direcciones de entrega de los pedidos.
     columns:
       - name: address_id
-        tests:
-          - not_null
-          - unique
         data_type: varchar
         constraints:
           - type: not_null
+          - type: unique
         description: >
-          Id del registro hasheado.   
+          Id del registro hasheado.
+        tests:
+          - not_null
+          - unique 
       - name: zipcode
         data_type: int
+        constraints:
+          - type: not_null
         description: >
           Código postal.
         tests:
           - not_null
       - name: country
         data_type: varchar
+        constraints:
+          - type: not_null
         description: >
           País.
         tests:
           - not_null
       - name: address
+        data_type: varchar
+        constraints:
+          - type: not_null
         description: >
           Nombre de la vía y número de la dirección.
         tests:
           - not_null
       - name: state
+        data_type: varchar
+        constraints:
+          - type: not_null
         description: >
           Estado (Localización).
         tests:
           - not_null
       - name: _fivetran_deleted
+        data_type: boolean
+        constraints:
+          - type: not_null
         description: >
           Indica si el registro ha sido borrado en la base de datos de origen.
       - name: _fivetran_synced
+        data_type: date
+        constraints:
+          - type: not_null
         description: >
           Fecha en que se cargaron los datos.
         tests:
           - not_null
 
   - name: base_sql_server_dbo__events
+    config:
+      contract:
+        enforced: true
     description: >
-      Eventos realizados por un usuario en la web relacionados con los productos.
+      Eventos realizados por un usuario en la web relacionados con los productos y los pedidos.
     columns:
       - name: event_id
+        data_type: varchar
+        constraints:
+          - type: not_null
+          - type: unique
         description: >
-          Id del registro.
+          Id del evento.
         tests:
           - not_null
           - unique
       - name: page_url
+        data_type: varchar
+        constraints:
+          - type: not_null
         description: >
           Url de la sección de la web visitada por el usuario.
         tests:
           - not_null
       - name: event_type
+        data_type: varchar
+        constraints:
+          - type: not_null
         description: >
           Tipo de evento realizado por el usuario en la web.
         tests:
           - accepted_values:
               values: ['placed', 'shipped', 'completed', 'returned']
       - name: user_id
+        data_type: varchar
+        constraints:
+          - type: not_null
         description: >
           Id del usuario que realiza el evento.
         tests:
           - not_null
       - name: product_id
+        data_type: varchar
+        constraints:
+          - type: not_null
         description: >
           Id del producto para el que está realizando el evento el usuario.
         tests:
           - not_null
       - name: session_id
+        data_type: varchar
+        constraints:
+          - type: not_null
         description: >
           Id de la sesión que une los diferentes eventos realizados por el usuario.
         tests:
           - not_null
       - name: created_at
+        data_type: date
+        constraints:
+          - type: not_null
         description: >
           Fecha en la que se añadió el registro a la tabla.
         tests:
           - not_null
       - name: order_id
+        data_type: varchar
+        constraints:
+          - type: not_null
         description: >
           Id de la orden del producto en caso de que el usuario lo haya comprado.
+        tests:
+          - not_null
+      - name: _fivetran_deleted
+        data_type: boolean
+        constraints:
+          - type: not_null
+        description: >
+          Indica si el registro ha sido borrado en la base de datos de origen.
+      - name: _fivetran_synced
+        data_type: date
+        constraints:
+          - type: not_null
+        description: >
+          Fecha en que se cargaron los datos.
+        tests:
+          - not_null
+
+  - name: base_sql_server_dbo__order_items
+    config:
+      contract:
+        enforced: true
+    description: >
+      Productos asociados a cada pedido de la tabla orders.
+    columns:
+      - name: order_id
+        description: >
+          Id del pedido asociado.
+        tests:
+          - not_null
+      - name: product_id
+        description: >
+          Id del producto.
+        tests:
+          - not_null
+      - name: quantity
+        description: >
+          Unidades de producto asociadas al pedido.
         tests:
           - not_null
       - name: _fivetran_deleted
@@ -101,6 +186,9 @@ models:
           - not_null
 
   - name: base_sql_server_dbo__orders
+    config:
+      contract:
+        enforced: true
     description: >
       Pedidos realizados por un usuario.
     columns:
@@ -177,35 +265,10 @@ models:
         tests:
           - not_null
 
-  - name: base_sql_server_dbo__order_items
-    description: >
-      Productos asociados a cada pedido de la tabla orders.
-    columns:
-      - name: order_id
-        description: >
-          Id del pedido asociado.
-        tests:
-          - not_null
-      - name: product_id
-        description: >
-          Id del producto.
-        tests:
-          - not_null
-      - name: quantity
-        description: >
-          Unidades de producto asociadas al pedido.
-        tests:
-          - not_null
-      - name: _fivetran_deleted
-        description: >
-          Indica si el registro ha sido borrado en la base de datos de origen.
-      - name: _fivetran_synced
-        description: >
-          Fecha en que se cargaron los datos.
-        tests:
-          - not_null
-
   - name: base_sql_server_dbo__products
+    config:
+      contract:
+        enforced: true
     description: >
       Copnjunto de productos disponibles.
     columns:
@@ -240,6 +303,9 @@ models:
           - not_null
 
   - name: base_sql_server_dbo__promos
+    config:
+      contract:
+        enforced: true
     description: >
       Tipo de descuentos.
     columns:
@@ -270,6 +336,9 @@ models:
           - not_null
 
   - name: base_sql_server_dbo__users
+    config:
+      contract:
+        enforced: true
     description: >
       Usuarios de la web.
     columns:

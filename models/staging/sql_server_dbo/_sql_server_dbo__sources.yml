@@ -29,7 +29,6 @@ sources:
           - name: zipcode
             description: >
               Código postal.
-            data_type: number
             tests:
               - not_null
           - name: country
