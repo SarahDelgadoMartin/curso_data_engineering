@@ -3,7 +3,7 @@ version: 2
 models:
   - name: base_google_sheets__budget
     description: >
-      Esta tabla base contiene información limpia y estandarizada del presupuesto/objetivo del mes.
+      Información limpia y estandarizada del objetivo mensual por producto.
     columns:
       - name: budget_id
         data_type: varchar
@@ -15,13 +15,13 @@ models:
       - name: product_id
         data_type: varchar
         description: >
-          Id única para cada producto.
+          Id única para cada producto hasheada.
         tests:
           - not_null
       - name: target_quantity
         data_type: int
         description: >
-          Número de unidades por cada producto y cada mes por producto. 
+          Número de unidades objetivo mensual por producto. 
         tests:
           - not_null
           - positive_values

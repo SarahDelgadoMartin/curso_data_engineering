@@ -32,18 +32,18 @@ sources:
               - unique
           - name: product_id
             description: >
-              Id única para cada p.
+              Id única para cada producto.
             tests:
               - not_null
           - name: quantity
             description: >
-              Número de unidades por cada producto y cada mes por producto. 
+              Número de unidades objetivo mensual de cada producto. 
             tests:
               - not_null
               - positive_values
           - name: month
             description: >
-              Cada mes -> Final de mes.
+              Fecha que representa el final de cada mes.
             tests:
               - not_null
           - name: _fivetran_synced

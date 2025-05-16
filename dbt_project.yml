@@ -44,6 +44,8 @@ models:
         +schema: google_sheets
       sql_server_dbo:
         +schema: sql_server_dbo
+      own_data:
+        +schema: own_data
       
     marts:
       +materialized: table
