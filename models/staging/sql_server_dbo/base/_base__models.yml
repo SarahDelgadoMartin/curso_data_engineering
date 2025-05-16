@@ -11,6 +11,7 @@ models:
       - name: address_id
         data_type: varchar
         constraints:
+          - type: primary_key
           - type: not_null
           - type: unique
         description: >
@@ -75,6 +76,7 @@ models:
       - name: event_id
         data_type: varchar
         constraints:
+          - type: primary_key
           - type: not_null
           - type: unique
         description: >
@@ -98,7 +100,7 @@ models:
           Tipo de evento realizado por el usuario en la web.
         tests:
           - accepted_values:
-              values: ['placed', 'shipped', 'completed', 'returned']
+              values: ['ckeckout', 'package_shipped', 'add_to_cart', 'page_view']
       - name: user_id
         data_type: varchar
         constraints:
@@ -139,13 +141,13 @@ models:
           Id de la orden del producto en caso de que el usuario lo haya comprado.
         tests:
           - not_null
-      - name: _fivetran_deleted
+      - name: is_delete
         data_type: boolean
         constraints:
           - type: not_null
         description: >
           Indica si el registro ha sido borrado en la base de datos de origen.
-      - name: _fivetran_synced
+      - name: date_load
         data_type: date
         constraints:
           - type: not_null
