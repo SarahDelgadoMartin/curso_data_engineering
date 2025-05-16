@@ -1,6 +1,8 @@
 {{
   config(
-    materialized='incremental'
+    materialized='incremental',
+    unique_key='order_id',
+    on_schema_change='append_new_columns'
   )
     }}
 
@@ -25,14 +27,14 @@ renamed_casted AS (
         promo_id,
         shipping_cost,
         order_total,
-	    shipping_service,
+	    {{ dbt_utils.generate_surrogate_key(['shipping_service']) }} AS shipping_service_id,
         tracking_id,
-        DATE(estimated_delivery_at) AS estimated_delivery_date_at,
-        TIME(estimated_delivery_at) AS estimated_delivery_time_at,
-        DATE(delivered_at) AS delivered_date_at,
-        TIME(delivered_at) AS delivered_time_at,
-        DATE(created_at) AS created_date_at,
-        TIME(created_at) AS created_time_at,
+        DATE(estimated_delivery_at) AS estimated_delivery_at_date,
+        TIME(estimated_delivery_at) AS estimated_delivery_at_time,
+        DATE(delivered_at) AS delivered_at_date,
+        TIME(delivered_at) AS delivered_at_time,
+        DATE(created_at) AS created_at_date,
+        TIME(created_at) AS created_at_time,
         is_delete,
         date_load
     FROM base_orders

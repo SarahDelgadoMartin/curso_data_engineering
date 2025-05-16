@@ -24,8 +24,8 @@ renamed_casted AS (
         user_id,
         session_id,
         event_type,
-        DATE(created_at) AS created_date_at,
-        TIME(created_at) AS created_time_at,
+        DATE(created_at) AS created_at_date,
+        TIME(created_at) AS created_at_time,
         is_delete,
         date_load
     FROM base_events

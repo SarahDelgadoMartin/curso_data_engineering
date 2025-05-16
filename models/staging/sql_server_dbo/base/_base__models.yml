@@ -51,14 +51,16 @@ models:
           Estado (Localización).
         tests:
           - not_null
-      - name: _fivetran_deleted
+      - name: is_deleted
         data_type: boolean
         constraints:
           - type: not_null
         description: >
           Indica si el registro ha sido borrado en la base de datos de origen.
-      - name: _fivetran_synced
-        data_type: date
+        tests:
+          - not null
+      - name: date_load
+        data_type: timestamp_tz
         constraints:
           - type: not_null
         description: >
@@ -125,8 +127,8 @@ models:
           Id de la sesión que une los diferentes eventos realizados por el usuario.
         tests:
           - not_null
-      - name: created_at
-        data_type: date
+      - name: created_at_timestamp
+        data_type: timestamp_tz
         constraints:
           - type: not_null
         description: >
@@ -147,8 +149,10 @@ models:
           - type: not_null
         description: >
           Indica si el registro ha sido borrado en la base de datos de origen.
+        tests:
+          - not null
       - name: date_load
-        data_type: date
+        data_type: timestamp_tz
         constraints:
           - type: not_null
         description: >
@@ -163,25 +167,53 @@ models:
     description: >
       Productos asociados a cada pedido de la tabla orders.
     columns:
+      - name: order_items_id
+        data_type: varchar
+        constraints:
+          - type: primary_key
+          - type: not_null
+          - type: unique
+        description: >
+          Id del registro.
+        tests:
+          - not_null
       - name: order_id
+        data_type: varchar
+        constraints:
+          - type: not_null
         description: >
           Id del pedido asociado.
         tests:
           - not_null
       - name: product_id
+        data_type: varchar
+        constraints:
+          - type: not_null
         description: >
           Id del producto.
         tests:
           - not_null
-      - name: quantity
+      - name: total_quantity
+        data_type: int
+        constraints:
+          - type: not_null
         description: >
           Unidades de producto asociadas al pedido.
         tests:
           - not_null
-      - name: _fivetran_deleted
+          - positive_values
+      - name: is_deleted
+        data_type: boolean
+        constraints:
+          - type: not_null
         description: >
           Indica si el registro ha sido borrado en la base de datos de origen.
-      - name: _fivetran_synced
+        tests:
+          - not null
+      - name: date_load
+        data_type: timestamp_tz
+        constraints:
+          - type: not_null
         description: >
           Fecha en que se cargaron los datos.
         tests:
@@ -195,143 +227,124 @@ models:
       Pedidos realizados por un usuario.
     columns:
       - name: order_id
+        data_type: varchar
+        constraints:
+          - type: primary_key
+          - type: not_null
+          - type: unique
         description: >
-          Id de la orden.
+          Id único de la orden hasheado.
         tests:
           - not_null
           - unique
-      - name: shipping_service
-        description: >
-          Servicio de envío asociado al pedido.
-        tests:
-          - accepted_values:
-              values: ['ups', 'usps', 'dhl', 'fedex', '']
-      - name: shipping_cost
-        description: >
-          Precio del servicio de envío asociado al pedido.
-        tests:
-          - not_null
-      - name: address_id
-        description: >
-          Id de la dirección del usuario a la que se realiza el envío.
-        tests:
-          - not_null
-      - name: created_at
-        description: >
-          Fecha en la que se añadió el registro a la tabla.
-        tests:
-          - not_null
-      - name: promo_id
-        description: >
-          Id de la promoción que se le aplica al pedido.
-        tests:
-          - not_null
-      - name: estimated_delivery_at
-        description: >
-          Fecha estimada de entrega del pedido.
-      - name: order_cost
-        description: >
-          Precio total de los productos del pedido antes de añadir coste de envío y aplicar promoción.
-        tests:
-          - not_null
       - name: user_id
+        data_type: varchar
+        constraints:
+          - type: not_null
         description: >
           Id del usuario que realiza el pedido.
         tests:
           - not_null
+      - name: address_id
+        data_type: varchar
+        constraints:
+          - type: not_null
+        description: >
+          Id de la dirección del usuario a la que se realiza el envío.
+        tests:
+          - not_null
+      - name: status
+        data_type: varchar
+        constraints:
+          - type: not_null
+        description: >
+          Id para el seguimiento del pedido.
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['delivered', 'preparing', 'shipped']
+      - name: order_cost
+        data_type: float
+        constraints:
+          - type: not_null
+        description: >
+          Precio total de los productos del pedido antes de añadir coste de envío y aplicar promoción.
+        tests:
+          - not_null
+      - name: promo_id
+        data_type: varchar
+        constraints:
+          - type: not_null
+        description: >
+          Id de la promoción que se le aplica al pedido.
+        tests:
+          - not_null
+      - name: shipping_cost
+        data_type: varchar
+        constraints:
+          - type: not_null
+        description: >
+          Precio del servicio de envío asociado al pedido.
+        tests:
+          - not_null
       - name: order_total
+        data_type: float
+        constraints:
+          - type: not_null
         description: >
           Precio total del pedido después de añadir coste de envío y aplicar promoción.
         tests:
           - not_null
+      - name: shipping_service
+        data_type: varchar
+        constraints:
+          - type: not_null
+        description: >
+          Servicio de envío asociado al pedido.
+        tests:
+          - not null
+          - accepted_values:
+              values: ['ups', 'usps', 'dhl', 'fedex', '']
+      - name: tracking_id
+        data_type: varchar
+        constraints:
+          - type: not_null
+        description: >
+          Id para el seguimiento del pedido.
+        tests:
+          - not_null
+      - name: estimated_delivery_at_timestamp
+        data_type: timestamp_tz
+        constraints:
+          - type: not_null
+        description: >
+          Fecha estimada de entrega del pedido.
       - name: delivered_at_timestamp
+        data_type: timestamp_tz
+        constraints:
+          - type: not_null
         description: >
           Fecha de entrega del pedido.
-      - name: tracking_id
+      - name: created_at_timestamp
+        data_type: timestamp_tz
+        constraints:
+          - type: not_null
         description: >
-          Id para el seguimiento del pedido.
+          Fecha en la que se añadió el registro a la tabla.
         tests:
           - not_null
-      - name: status
-        description: >
-          Id para el seguimiento del pedido.
-        tests:
-          - accepted_values:
-              values: ['delivered', 'preparing', 'shipped']
-      - name: _fivetran_deleted
+      - name: is_deleted
+        data_type: boolean
+        constraints:
+          - type: not_null
         description: >
           Indica si el registro ha sido borrado en la base de datos de origen.
-      - name: _fivetran_synced
-        description: >
-          Fecha en que se cargaron los datos.
         tests:
           - not_null
-
-  - name: base_sql_server_dbo__products
-    config:
-      contract:
-        enforced: true
-    description: >
-      Copnjunto de productos disponibles.
-    columns:
-      - name: product_id
-        description: >
-          Id del producto hasheado.
-        tests:
-          - not_null
-          - unique
-      - name: price
-        description: >
-          Precio del producto.
-        tests:
-          - not_null
-      - name: name
-        description: >
-          Nombre del producto.
-        tests:
-          - not_null
-      - name: inventory
-        description: >
-          Cantidad de producto disponible.
-        tests:
-          - not_null
-      - name: _fivetran_deleted
-        description: >
-          Indica si el registro ha sido borrado en la base de datos de origen.
-      - name: _fivetran_synced
-        description: >
-          Fecha en que se cargaron los datos.
-        tests:
-          - not_null
-
-  - name: base_sql_server_dbo__promos
-    config:
-      contract:
-        enforced: true
-    description: >
-      Tipo de descuentos.
-    columns:
-      - name: promo_id
-        description: >
-          Id de la promoción.
-        tests:
-          - not_null
-          - unique
-      - name: discount
-        description: >
-          Cantidad en unidad de descuento de la promoción.
-        tests:
-          - not_null
-      - name: status
-        description: >
-          Estado de la promoción.
-        tests:
-          - accepted_values:
-              values: ['inactive', 'active']
-      - name: _fivetran_deleted
-        description: >
-          Indica si el registro ha sido borrado en la base de datos de origen.
-      - name: _fivetran_synced
+      - name: date_load
+        data_type: timestamp_tz
+        constraints:
+          - type: not_null
         description: >
           Fecha en que se cargaron los datos.
         tests:
@@ -345,53 +358,84 @@ models:
       Usuarios de la web.
     columns:
       - name: user_id
+        data_type: varchar
+        constraints:
+          - type: primary_key
+          - type: not_null
+          - type: unique
         description: >
-          Id del usuario.
+          Id único del usuario hasheado.
         tests:
           - not_null
           - unique
-      - name: updated_at
-        description: >
-          Fecha de la última actualización de los datos del usuario.
-        tests:
-          - not null
-      - name: address_id
-        description: >
-          Id de la dirección del usuario.
-        tests:
-          - not null
       - name: last_name
+        data_type: varchar
+        constraints:
+          - type: not_null
         description: >
           Apellido del usuario.
         tests:
           - not null
-      - name: created_at
-        description: >
-          Fecha de creación del registro.
-        tests:
-          - not null
-      - name: phone_number
-        description: >
-          Número de teléfono del usuario.
-        tests:
-          - not null
-      - name: total_orders
-        description: >
-          Total de pedidos realizados por el usuario.
       - name: first_name
+        data_type: varchar
+        constraints:
+          - type: not_null
         description: >
           Nombre del usuario.
         tests:
           - not null
+      - name: address_id
+        data_type: varchar
+        constraints:
+          - type: not_null
+        description: >
+          Id de la dirección del usuario.
+        tests:
+          - not null
+      - name: phone_number
+        data_type: varchar
+        constraints:
+          - type: not_null
+        description: >
+          Número de teléfono del usuario.
+        tests:
+          - not null
       - name: email
+        data_type: varchar
+        constraints:
+          - type: not_null
         description: >
           Correo electrónico del usuario.
         tests:
           - not null
-      - name: _fivetran_deleted
+      - name: created_at_timestamp
+        data_type: timestamp_tz
+        constraints:
+          - type: not_null
+        description: >
+          Fecha de creación del registro.
+        tests:
+          - not null
+      - name: updated_at_timestamp
+        data_type: timestamp_tz
+        constraints:
+          - type: not_null
+        description: >
+          Fecha de la última actualización de los datos del usuario.
+        tests:
+          - not null
+      - name: is_deleted
+        data_type: boolean
+        constraints:
+          - type: not_null
         description: >
           Indica si el registro ha sido borrado en la base de datos de origen.
-      - name: _fivetran_synced
+        tests:
+          - not_null
+      - name: date_load
+        data_type: timestamp_tz
+        constraints:
+          - type: not_null
         description: >
           Fecha en que se cargaron los datos.
         tests:

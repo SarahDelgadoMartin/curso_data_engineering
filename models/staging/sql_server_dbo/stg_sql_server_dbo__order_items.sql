@@ -20,8 +20,8 @@ final AS (
         boi.*,
         bp.price AS product_price
     FROM base_order_items boi
-    INNER JOIN {{ ref('base_sql_server_dbo__products') }} bp
-       ON boi.product_id = bp.product_id 
+    INNER JOIN {{ ref('stg_sql_server_dbo__products') }} sp
+       ON boi.product_id = sp.product_id 
     )
 
 SELECT * FROM final

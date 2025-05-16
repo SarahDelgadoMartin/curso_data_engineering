@@ -34,7 +34,7 @@ renamed_casted AS (
                     CAST('9999-12-31 23:59:59' AS TIMESTAMP_TZ)
                     ) AS TIMESTAMP_TZ
                 )
-            ) AS created_at,
+            ) AS created_at_timestamp,
         CASE 
             WHEN order_id != '' THEN {{ dbt_utils.generate_surrogate_key(['order_id']) }}
         END AS order_id,

@@ -74,9 +74,9 @@ sources:
             description: >
               Tipo de evento realizado por el usuario en la web.
             tests:
-              - accepted_values:
-                  values: ['ckeckout', 'package_shipped', 'add_to_cart', 'page_view']
               - not_null
+              - accepted_values:
+                  values: ['checkout', 'package_shipped', 'add_to_cart', 'page_view']
           - name: user_id
             description: >
               Id del usuario que realiza el evento.
@@ -131,6 +131,7 @@ sources:
               Precio del servicio de envío asociado al pedido.
             tests:
               - not_null
+              - positive_values
           - name: address_id
             description: >
               Id de la dirección del usuario a la que se realiza el envío.
@@ -154,6 +155,7 @@ sources:
               Precio total de los productos del pedido antes de añadir coste de envío y aplicar promoción.
             tests:
               - not_null
+              - positive_values
           - name: user_id
             description: >
               Id del usuario que realiza el pedido.
@@ -164,6 +166,7 @@ sources:
               Precio total del pedido después de añadir coste de envío y aplicar promoción.
             tests:
               - not_null
+              - positive_values
           - name: delivered_at_timestamp
             description: >
               Fecha de entrega del pedido.
@@ -176,6 +179,7 @@ sources:
             description: >
               Id para el seguimiento del pedido.
             tests:
+              - not_null
               - accepted_values:
                   values: ['delivered', 'preparing', 'shipped']
           - name: _fivetran_deleted
@@ -206,6 +210,7 @@ sources:
               Unidades de producto asociadas al pedido.
             tests:
               - not_null
+              - positive_values
           - name: _fivetran_deleted
             description: >
               Indica si el registro ha sido borrado en la base de datos de origen.
@@ -230,6 +235,7 @@ sources:
               Precio del producto.
             tests:
               - not_null
+              - positive_values
           - name: name
             description: >
               Nombre del producto.
@@ -240,6 +246,7 @@ sources:
               Cantidad de producto disponible.
             tests:
               - not_null
+              - positive_values
           - name: _fivetran_deleted
             description: >
               Indica si el registro ha sido borrado en la base de datos de origen.
@@ -264,6 +271,7 @@ sources:
               Cantidad en unidades de descuento de la promoción.
             tests:
               - not_null
+              - positive_values
           - name: status
             description: >
               Estado de la promoción.
