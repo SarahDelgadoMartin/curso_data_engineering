@@ -6,9 +6,20 @@
   )
     }}
 
-WITH src_products AS (
+WITH base_products AS (
     SELECT * 
-    FROM {{ source('sql_server_dbo', 'products') }}
+    FROM {{ ref('base_sql_server_dbo__products') }}
+
+    {% if is_incremental() %}
+
+	WHERE _fivetran_synced > (SELECT MAX(date_load) FROM {{ this }} )
+
+    {% endif %}
+    ),
+
+base_product_details AS (
+    SELECT * 
+    FROM {{ ref('stg_own_data__product_details') }}
 
     {% if is_incremental() %}
 
@@ -19,13 +30,19 @@ WITH src_products AS (
 
 renamed_casted AS (
     SELECT
-        {{ dbt_utils.generate_surrogate_key(['product_id']) }} AS product_id,
-        CAST(REPLACE(REPLACE(price, ',', '.'), ' ', '') AS FLOAT) AS price,
-        CAST(name AS VARCHAR(256)) AS name,
-        CAST(inventory AS INT) AS inventory,
-        CAST(IFNULL(_fivetran_deleted, FALSE) AS BOOLEAN) AS is_delete,
-        CONVERT_TIMEZONE('UTC', CAST(_fivetran_synced AS TIMESTAMP_TZ)) AS date_load
-    FROM src_products
+        bp.product_id,
+        bp.price,
+        bp.name,
+        bp.inventory,
+        bpd.plant_group,
+        bpd.product_weight_kg,
+        bpd.care_level,
+        bpd.mature_size,
+        bp.is_delete,
+        bp.date_load
+    FROM base_products bp
+    INNER JOIN base_product_details bpd 
+    ON bp.product_id = bpd.product_id
     )
 
 SELECT * FROM renamed_casted
