@@ -23,10 +23,16 @@ models:
         data_type: varchar
         constraints:
           - type: not_null
+          - type: foreign_key
+            to: ref('stg_own_data__zipcode_data')
+            to_columns: [zipcode_id]
         description: >
           Id del código postal hasheado.
         tests:
           - not_null
+          - relationships:
+                to: ref('stg_own_data__zipcode_data')
+                field: zipcode_id
       - name: country
         data_type: varchar
         constraints:
@@ -51,13 +57,15 @@ models:
           Estado (Localización).
         tests:
           - not_null
-      - name: _fivetran_deleted
+      - name: is_deleted
         data_type: boolean
         constraints:
           - type: not_null
         description: >
           Indica si el registro ha sido borrado en la base de datos de origen.
-      - name: _fivetran_synced
+        tests:
+          - not null
+      - name: date_load
         data_type: date
         constraints:
           - type: not_null
@@ -93,10 +101,16 @@ models:
         data_type: varchar
         constraints:
           - type: not_null
+          - type: foreign_key
+            to: ref('stg_sql_server_dbo__users')
+            to_columns: [user_id]
         description: >
           Id del usuario que realiza el evento.
         tests:
           - not_null
+          - relationships:
+                to: ref('stg_sql_server_dbo__users')
+                field: user_id
       - name: session_id
         data_type: varchar
         constraints:
@@ -114,16 +128,22 @@ models:
         tests:
           - not null
           - accepted_values:
-              values: ['ckeckout', 'package_shipped', 'add_to_cart', 'page_view']
+              values: ['checkout', 'package_shipped', 'add_to_cart', 'page_view']
       - name: product_id
         data_type: varchar
         constraints:
           - type: not_null
+          - type: foreign_key
+            to: ref('stg_sql_server_dbo__products')
+            to_columns: [product_id]
         description: >
           Id del producto para el que está realizando el evento el usuario.
         tests:
           - not_null
-      - name: created_date_at
+          - relationships:
+                to: ref('stg_sql_server_dbo__products')
+                field: product_id
+      - name: created_at_date
         data_type: date
         constraints:
           - type: not_null
@@ -131,7 +151,7 @@ models:
           Fecha en la que se añadió el registro a la tabla.
         tests:
           - not_null
-      - name: created_time_at
+      - name: created_at_time
         data_type: time
         constraints:
           - type: not_null
@@ -143,10 +163,16 @@ models:
         data_type: varchar
         constraints:
           - type: not_null
+          - type: foreign_key
+            to: ref('stg_sql_server_dbo__orders')
+            to_columns: [order_id]
         description: >
           Id de la orden del producto en caso de que el usuario lo haya comprado.
         tests:
           - not_null
+          - relationships:
+                to: ref('stg_sql_server_dbo__orders')
+                field: order_id
       - name: is_deleted
         data_type: boolean
         constraints:
@@ -168,139 +194,333 @@ models:
     description: >
       Productos asociados a cada pedido de la tabla orders.
     columns:
+      - name: order_items_id
+        data_type: varchar
+        constraints:
+          - type: primary_key
+          - type: not_null
+          - type: unique
+        description: >
+          Id único del registro hasheado.
+        tests:
+          - not_null
+          - unique
       - name: order_id
+        data_type: varchar
+        constraints:
+          - type: not_null
+          - type: foreign_key
+            to: ref('stg_sql_server_dbo__orders')
+            to_columns: [order_id]
         description: >
           Id del pedido asociado.
         tests:
           - not_null
+          - relationships:
+                to: ref('stg_sql_server_dbo__orders')
+                field: order_id
       - name: product_id
+        data_type: varchar
+        constraints:
+          - type: not_null
+          - type: foreign_key
+            to: ref('stg_sql_server_dbo__products')
+            to_columns: [product_id]
         description: >
           Id del producto.
         tests:
           - not_null
+          - relationships:
+                to: ref('stg_sql_server_dbo__products')
+                field: product_id
       - name: quantity
+        data_type: int
+        constraints:
+          - type: not_null
         description: >
           Unidades de producto asociadas al pedido.
         tests:
           - not_null
           - positive_values
-      - name: _fivetran_deleted
+      - name: product_price
+        data_type: float
+        constraints:
+          - type: not_null
+        description: >
+          Precio unitario del producto.
+        tests:
+          - not_null
+          - positive_values
+      - name: is_deleted
+        data_type: boolean
+        constraints:
+          - type: not_null
         description: >
           Indica si el registro ha sido borrado en la base de datos de origen.
-      - name: _fivetran_synced
+        tests:
+          - not_null
+      - name: date_load
+        data_type: date
+        constraints:
+          - type: not_null
         description: >
           Fecha en que se cargaron los datos.
         tests:
           - not_null
 
   - name: stg_sql_server_dbo__orders
+    config:
+      contract:
+        enforced: true
     description: >
       Pedidos realizados por un usuario.
     columns:
       - name: order_id
+        data_type: varchar
+        constraints:
+          - type: primary_key
+          - type: not_null
+          - type: unique
         description: >
-          Id de la orden.
+          Id único de la orden hasheado.
         tests:
           - not_null
           - unique
-      - name: shipping_service
-        description: >
-          Servicio de envío asociado al pedido.
-        tests:
-          - accepted_values:
-              values: ['ups', 'usps', 'dhl', 'fedex', '']
-      - name: shipping_cost
-        description: >
-          Precio del servicio de envío asociado al pedido.
-        tests:
-          - not_null
-      - name: address_id
-        description: >
-          Id de la dirección del usuario a la que se realiza el envío.
-        tests:
-          - not_null
-      - name: created_at
-        description: >
-          Fecha en la que se añadió el registro a la tabla.
-        tests:
-          - not_null
-      - name: promo_id
-        description: >
-          Id de la promoción que se le aplica al pedido.
-        tests:
-          - not_null
-      - name: estimated_delivery_at
-        description: >
-          Fecha estimada de entrega del pedido.
-      - name: order_cost
-        description: >
-          Precio total de los productos del pedido antes de añadir coste de envío y aplicar promoción.
-        tests:
-          - not_null
-          - positive_values
       - name: user_id
+        data_type: varchar
+        constraints:
+          - type: not_null
+          - type: foreign_key
+            to: ref('stg_sql_server_dbo__users')
+            to_columns: [user_id]
         description: >
           Id del usuario que realiza el pedido.
         tests:
           - not_null
+          - relationships:
+                to: ref('stg_sql_server_dbo__users')
+                field: user_id
+      - name: address_id
+        data_type: varchar
+        constraints:
+          - type: not_null
+          - type: foreign_key
+            to: ref('stg_sql_server_dbo__addresses')
+            to_columns: [address_id]
+        description: >
+          Id de la dirección del usuario a la que se realiza el envío.
+        tests:
+          - not_null
+          - relationships:
+                to: ref('stg_sql_server_dbo__addresses')
+                field: address_id
+      - name: status
+        data_type: varchar
+        constraints:
+          - type: not_null
+        description: >
+          Id para el seguimiento del pedido.
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['delivered', 'preparing', 'shipped']
+      - name: order_cost
+        data_type: float
+        constraints:
+          - type: not_null
+        description: >
+          Precio total de los productos del pedido antes de añadir coste de envío y aplicar promoción.
+        tests:
+          - not_null
+      - name: promo_id
+        data_type: varchar
+        constraints:
+          - type: not_null
+          - type: foreign_key
+            to: ref('stg_sql_server_dbo__promos')
+            to_columns: [promo_id]
+        description: >
+          Id de la promoción que se le aplica al pedido.
+        tests:
+          - not_null
+          - relationships:
+                to: ref('stg_sql_server_dbo__promos')
+                field: promo_id
+      - name: shipping_cost
+        data_type: float
+        constraints:
+          - type: not_null
+        description: >
+          Precio del servicio de envío asociado al pedido.
+        tests:
+          - not_null
       - name: order_total
+        data_type: float
+        constraints:
+          - type: not_null
         description: >
           Precio total del pedido después de añadir coste de envío y aplicar promoción.
         tests:
           - not_null
-          - positive_values
-      - name: delivered_at_timestamp
+      - name: shipping_service_id
+        data_type: varchar
+        constraints:
+          - type: not_null
+          - type: foreign_key
+            to: ref('stg_sql_server_dbo__shipping_services')
+            to_columns: [shipping_service_id]
         description: >
-          Fecha de entrega del pedido.
+          Servicio de envío asociado al pedido.
+        tests:
+          - not_null
+          - relationships:
+                to: ref('stg_sql_server_dbo__shipping_services')
+                field: shipping_service_id
       - name: tracking_id
+        data_type: varchar
+        constraints:
+          - type: not_null
         description: >
           Id para el seguimiento del pedido.
         tests:
           - not_null
-      - name: status
+      - name: estimated_delivery_at_date
+        data_type: date
+        constraints:
+          - type: not_null
+          - type: foreign_key
+            to: ref('stg_own_data__dates')
+            to_columns: [date_day]
         description: >
-          Id para el seguimiento del pedido.
+          Fecha estimada de entrega del pedido.
         tests:
-          - accepted_values:
-              values: ['delivered', 'preparing', 'shipped']
-      - name: _fivetran_deleted
+          - not_null
+          - relationships:
+                to: ref('stg_own_data__dates')
+                field: date_day
+      - name: estimated_delivery_at_time
+        data_type: time
+        constraints:
+          - type: not_null
+        description: >
+          Hora estimada de entrega del pedido.
+        tests:
+          - not_null
+      - name: delivered_at_date
+        data_type: date
+        constraints:
+          - type: not_null
+          - type: foreign_key
+            to: ref('stg_own_data__dates')
+            to_columns: [date_day]
+        description: >
+          Fecha de entrega del pedido.
+        tests:
+          - not_null
+          - relationships:
+                to: ref('stg_own_data__dates')
+                field: date_day
+      - name: delivered_at_time
+        data_type: time
+        constraints:
+          - type: not_null
+        description: >
+          Hora de entrega del pedido.
+        tests:
+          - not_null
+      - name: created_at_date
+        data_type: date
+        constraints:
+          - type: not_null
+          - type: foreign_key
+            to: ref('stg_own_data__dates')
+            to_columns: [date_day]
+        description: >
+          Fecha en la que se añadió el registro a la tabla.
+        tests:
+          - not_null
+          - relationships:
+                to: ref('stg_own_data__dates')
+                field: date_day
+      - name: created_at_time
+        data_type: time
+        constraints:
+          - type: not_null
+        description: >
+          Hora en la que se añadió el registro a la tabla.
+        tests:
+          - not_null
+      - name: is_deleted
+        data_type: boolean
+        constraints:
+          - type: not_null
         description: >
           Indica si el registro ha sido borrado en la base de datos de origen.
-      - name: _fivetran_synced
+        tests:
+          - not_null
+      - name: date_load
+        data_type: timestamp_tz
+        constraints:
+          - type: not_null
         description: >
           Fecha en que se cargaron los datos.
         tests:
           - not_null
 
   - name: stg_sql_server_dbo__products
+    config:
+      contract:
+        enforced: true
     description: >
-      Copnjunto de productos disponibles.
+      Conjunto de productos disponibles.
     columns:
       - name: product_id
+        data_type: varchar
+        constraints:
+          - type: primary_key
+          - type: not_null
+          - type: unique
         description: >
           Id del producto hasheado.
         tests:
           - not_null
           - unique
       - name: price
+        data_type: float
+        constraints:
+          - type: not_null
         description: >
           Precio del producto.
         tests:
           - not_null
       - name: name
+        data_type: varchar
+        constraints:
+          - type: not_null
         description: >
           Nombre del producto.
         tests:
           - not_null
       - name: inventory
+        data_type: int
+        constraints:
+          - type: not_null
         description: >
           Cantidad de producto disponible.
         tests:
           - not_null
-      - name: _fivetran_deleted
+      - name: is_deleted
+        data_type: boolean
+        constraints:
+          - type: not_null
         description: >
           Indica si el registro ha sido borrado en la base de datos de origen.
-      - name: _fivetran_synced
+        tests:
+          - not_null
+      - name: date_load
+        data_type: timestamp_tz
+        constraints:
+          - type: not_null
         description: >
           Fecha en que se cargaron los datos.
         tests:
@@ -337,99 +557,127 @@ models:
           - not_null
 
   - name: stg_sql_server_dbo__users
-    description: >
-      Usuarios de la web.
-    columns:
-      - name: user_id
-        description: >
-          Id del usuario.
-        tests:
-          - not_null
-          - unique
-      - name: updated_at
-        description: >
-          Fecha de la última actualización de los datos del usuario.
-        tests:
-          - not null
-      - name: address_id
-        description: >
-          Id de la dirección del usuario.
-        tests:
-          - not null
-      - name: last_name
-        description: >
-          Apellido del usuario.
-        tests:
-          - not null
-      - name: created_at
-        description: >
-          Fecha de creación del registro.
-        tests:
-          - not null
-      - name: phone_number
-        description: >
-          Número de teléfono del usuario.
-        tests:
-          - not null
-      - name: total_orders
-        description: >
-          Total de pedidos realizados por el usuario.
-      - name: first_name
-        description: >
-          Nombre del usuario.
-        tests:
-          - not null
-      - name: email
-        description: >
-          Correo electrónico del usuario.
-        tests:
-          - not null
-      - name: _fivetran_deleted
-        description: >
-          Indica si el registro ha sido borrado en la base de datos de origen.
-      - name: _fivetran_synced
-        description: >
-          Fecha en que se cargaron los datos.
-        tests:
-          - not_null
-
-  - name: products
     config:
       contract:
         enforced: true
     description: >
-      Data about all products in demo.
+      Usuarios de la web.
     columns:
-      - name: product_id
+      - name: user_id
+        data_type: varchar
+        constraints:
+          - type: primary_key
+          - type: not_null
+          - type: unique
+        description: >
+          Id único del usuario hasheado.
         tests:
           - not_null
-        data_type: text
+          - unique
+      - name: last_name
+        data_type: varchar
         constraints:
           - type: not_null
         description: >
-          UUID for each unique product on platform.
-      - name: product_name
-        data_type: TEXT                      
+          Apellido del usuario.
+        tests:
+          - not null
+      - name: first_name
+        data_type: varchar
         constraints:
           - type: not_null
         description: >
-          Name of the product.
-      - name: unit_price_usd
-        data_type: real
+          Nombre del usuario.
+        tests:
+          - not null
+      - name: address_id
+        data_type: varchar
+        constraints:
+          - type: not_null
+          - type: foreign_key
+            to: ref('stg_sql_server_dbo__addresses')
+            to_columns: [address_id]
+        description: >
+          Id de la dirección del usuario.
+        tests:
+          - not null
+          - relationships:
+                to: ref('stg_sql_server_dbo__addresses')
+                field: address_id
+      - name: phone_number
+        data_type: varchar
         constraints:
           - type: not_null
         description: >
-          Price of the product.
-      - name: inventory
-        data_type: NUMBER                      
+          Número de teléfono del usuario.
+        tests:
+          - not null
+      - name: email
+        data_type: varchar
         constraints:
           - type: not_null
         description: >
-          Amount of the inventory we have for this product.
+          Correo electrónico del usuario.
+        tests:
+          - not null
+      - name: created_at_date
+        data_type: date
+        constraints:
+          - type: not_null
+          - type: foreign_key
+            to: ref('stg_own_data__dates')
+            to_columns: [date_day]
+        description: >
+          Fecha de creación del registro.
+        tests:
+          - not null
+          - relationships:
+                to: ref('stg_own_data__dates')
+                field: date_day
+      - name: created_at_time
+        data_type: time
+        constraints:
+          - type: not_null
+        description: >
+          Hora de creación del registro.
+        tests:
+          - not null
+      - name: updated_at_date
+        data_type: date
+        constraints:
+          - type: not_null
+          - type: foreign_key
+            to: ref('stg_own_data__dates')
+            to_columns: [date_day]
+        description: >
+          Fecha de la última actualización de los datos del usuario.
+        tests:
+          - not null
+          - relationships:
+                to: ref('stg_own_data__dates')
+                field: date_day
+      - name: updated_at_time
+        data_type: time
+        constraints:
+          - type: not_null
+        description: >
+          Hora de la última actualización de los datos del usuario.
+        tests:
+          - not null
+      - name: is_deleted
+        data_type: boolean
+        constraints:
+          - type: not_null
+        description: >
+          Indica si el registro ha sido borrado en la base de datos de origen.
+        tests:
+          - not_null
       - name: date_load
-        data_type: TIMESTAMP_TZ
+        data_type: timestamp_tz
         constraints:
-          - type: not_null   
+          - type: not_null
         description: >
-          Date that the data was loaded.
+          Fecha en que se cargaron los datos.
+        tests:
+          - not_null
    

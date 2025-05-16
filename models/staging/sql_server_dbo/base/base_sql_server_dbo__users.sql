@@ -32,7 +32,7 @@ renamed_casted AS (
                     CAST('9999-12-31 23:59:59' AS TIMESTAMP_TZ)
                     ) AS TIMESTAMP_TZ
                 )
-            ) AS created_at,
+            ) AS created_at_timestamp,
         CONVERT_TIMEZONE(
             'UTC',
             CAST(IFNULL(
@@ -40,7 +40,7 @@ renamed_casted AS (
                     CAST('9999-12-31 23:59:59' AS TIMESTAMP_TZ)
                     ) AS TIMESTAMP_TZ
                 )
-            ) AS updated_at,
+            ) AS updated_at_timestamp,
         CAST(IFNULL(_fivetran_deleted, FALSE) AS BOOLEAN) AS is_delete,
         CONVERT_TIMEZONE('UTC', CAST(_fivetran_synced AS TIMESTAMP_TZ)) AS date_load
     FROM src_users
