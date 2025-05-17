@@ -25,6 +25,7 @@ renamed_casted AS (
         {{ dbt_utils.generate_surrogate_key(['user_id']) }} AS user_id,
         CASE 
             WHEN product_id != '' THEN {{ dbt_utils.generate_surrogate_key(['product_id']) }} 
+            ELSE ''
         END AS product_id,
         {{ dbt_utils.generate_surrogate_key(['session_id']) }} AS session_id,
         CONVERT_TIMEZONE(
@@ -37,6 +38,7 @@ renamed_casted AS (
             ) AS created_at_timestamp,
         CASE 
             WHEN order_id != '' THEN {{ dbt_utils.generate_surrogate_key(['order_id']) }}
+            ELSE ''
         END AS order_id,
         CAST(IFNULL(_fivetran_deleted, FALSE) AS BOOLEAN) AS is_deleted,
         CONVERT_TIMEZONE('UTC', CAST(_fivetran_synced AS TIMESTAMP_TZ)) AS date_load

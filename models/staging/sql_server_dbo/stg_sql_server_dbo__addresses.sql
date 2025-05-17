@@ -22,12 +22,12 @@ renamed_casted AS (
         address_id,
         street,
         number,
-        {{ dbt_utils.generate_surrogate_key(['zipcode']) }} AS zipcode_id,
+        CAST({{ dbt_utils.generate_surrogate_key(['zipcode']) }} AS VARCHAR) AS zipcode_id,
         state,
         country,
         is_deleted,
         date_load
     FROM base_addresses
-    ),
+    )
 
 SELECT * FROM renamed_casted

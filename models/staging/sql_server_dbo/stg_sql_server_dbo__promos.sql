@@ -21,7 +21,7 @@ WITH src_promos AS (
     SELECT
        'no promo' AS promo_id,
        0 AS discount,
-       TRUE AS status,
+       'active' AS status,
        FALSE AS _fivetran_deleted,
        CURRENT_TIMESTAMP() AS _fivetran_synced 
     ),
@@ -34,8 +34,9 @@ renamed_casted AS (
         CAST(CASE status
             WHEN 'inactive' THEN FALSE
             WHEN 'active' THEN TRUE
+            ELSE FALSE
         END AS BOOLEAN) AS is_active,
-        CAST(IFNULL(FALSE, _fivetran_deleted) AS BOOLEAN) AS is_deleted,
+        CAST(IFNULL(_fivetran_deleted, FALSE) AS BOOLEAN) AS is_deleted,
         CONVERT_TIMEZONE('UTC', CAST(_fivetran_synced AS TIMESTAMP_TZ)) AS date_load
     FROM src_promos
     ) 
