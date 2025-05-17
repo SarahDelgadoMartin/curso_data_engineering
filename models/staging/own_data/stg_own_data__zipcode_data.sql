@@ -11,7 +11,7 @@ WITH src_zipcode AS (
 
 renamed_casted AS (
     SELECT
-        {{ dbt_utils.generate_surrogate_key(['zipcode']) }} AS zipcode_id,
+        CAST({{ dbt_utils.generate_surrogate_key(['zipcode']) }} AS VARCHAR) AS zipcode_id,
         CAST(zipcode AS VARCHAR) AS zipcode,
         CAST(city AS VARCHAR) AS city,
         CAST(state_code AS VARCHAR) AS state_code,

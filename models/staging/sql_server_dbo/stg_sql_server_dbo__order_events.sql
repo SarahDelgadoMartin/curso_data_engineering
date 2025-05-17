@@ -23,9 +23,7 @@ renamed_casted AS (
     SELECT
         {{ dbt_utils.generate_surrogate_key(['event_id', 'order_id']) }} AS order_event_id,
         event_id,
-        order_id,
-        is_deleted,
-        date_load
+        order_id
     FROM stg_events
     )   
 

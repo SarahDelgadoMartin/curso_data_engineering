@@ -60,7 +60,7 @@ models:
         tests:
           - not_null
       - name: date_load
-        data_type: date
+        data_type: timestamp_tz
         constraints:
           - type: not_null
         description: >

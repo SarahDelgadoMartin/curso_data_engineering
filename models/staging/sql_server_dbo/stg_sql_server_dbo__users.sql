@@ -33,11 +33,11 @@ renamed_casted AS (
               WHEN REGEXP_LIKE(email, '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$') THEN TRUE
               ELSE FALSE
             END AS BOOLEAN) AS is_valid_email,
-        DATE(created_at) AS created_date_at,
-        TIME(created_at) AS created_time_at,
-        DATE(updated_at) AS updated_date_at,
-        TIME(updated_at) AS updated_time_at,
-        is_delete,
+        DATE(created_at_timestamp) AS created_at_date,
+        TIME(created_at_timestamp) AS created_at_time,
+        DATE(updated_at_timestamp) AS updated_at_date,
+        TIME(updated_at_timestamp) AS updated_at_time,
+        is_deleted,
         date_load
     FROM base_users
     )   

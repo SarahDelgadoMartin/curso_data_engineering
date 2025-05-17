@@ -19,34 +19,28 @@ models:
         tests:
           - not_null
           - unique 
+      - name: street
+        data_type: varchar
+        constraints:
+          - type: not_null
+        description: >
+          Vía de la vivienda.
+        tests:
+          - not_null
+      - name: number
+        data_type: int
+        constraints:
+          - type: not_null
+        description: >
+          Número de la vivienda.
+        tests:
+          - not_null
       - name: zipcode_id
         data_type: varchar
         constraints:
           - type: not_null
-          - type: foreign_key
-            to: ref('stg_own_data__zipcode_data')
-            to_columns: [zipcode_id]
         description: >
           Id del código postal hasheado.
-        tests:
-          - not_null
-          - relationships:
-                to: ref('stg_own_data__zipcode_data')
-                field: zipcode_id
-      - name: country
-        data_type: varchar
-        constraints:
-          - type: not_null
-        description: >
-          País.
-        tests:
-          - not_null
-      - name: address
-        data_type: varchar
-        constraints:
-          - type: not_null
-        description: >
-          Nombre de la vía y número de la dirección.
         tests:
           - not_null
       - name: state
@@ -55,6 +49,14 @@ models:
           - type: not_null
         description: >
           Estado (Localización).
+        tests:
+          - not_null
+      - name: country
+        data_type: varchar
+        constraints:
+          - type: not_null
+        description: >
+          País.
         tests:
           - not_null
       - name: is_deleted
@@ -66,7 +68,7 @@ models:
         tests:
           - not_null
       - name: date_load
-        data_type: date
+        data_type: timestamp_tz
         constraints:
           - type: not_null
         description: >
@@ -129,20 +131,6 @@ models:
           - not_null
           - accepted_values:
               values: ['checkout', 'package_shipped', 'add_to_cart', 'page_view']
-      - name: product_id
-        data_type: varchar
-        constraints:
-          - type: not_null
-          - type: foreign_key
-            to: ref('stg_sql_server_dbo__products')
-            to_columns: [product_id]
-        description: >
-          Id del producto para el que está realizando el evento el usuario.
-        tests:
-          - not_null
-          - relationships:
-                to: ref('stg_sql_server_dbo__products')
-                field: product_id
       - name: created_at_date
         data_type: date
         constraints:
@@ -159,20 +147,6 @@ models:
           Hora en la que se añadió el registro a la tabla.
         tests:
           - not_null
-      - name: order_id
-        data_type: varchar
-        constraints:
-          - type: not_null
-          - type: foreign_key
-            to: ref('stg_sql_server_dbo__orders')
-            to_columns: [order_id]
-        description: >
-          Id de la orden del producto en caso de que el usuario lo haya comprado.
-        tests:
-          - not_null
-          - relationships:
-                to: ref('stg_sql_server_dbo__orders')
-                field: order_id
       - name: is_deleted
         data_type: boolean
         constraints:
@@ -244,7 +218,7 @@ models:
     description: >
       Productos asociados a cada pedido de la tabla orders.
     columns:
-      - name: order_items_id
+      - name: order_item_id
         data_type: varchar
         constraints:
           - type: primary_key
@@ -283,7 +257,7 @@ models:
           - relationships:
                 to: ref('stg_sql_server_dbo__products')
                 field: product_id
-      - name: quantity
+      - name: total_quantity
         data_type: int
         constraints:
           - type: not_null
@@ -310,7 +284,7 @@ models:
         tests:
           - not_null
       - name: date_load
-        data_type: date
+        data_type: timestamp_tz
         constraints:
           - type: not_null
         description: >
@@ -391,20 +365,14 @@ models:
           - relationships:
                 to: ref('stg_sql_server_dbo__addresses')
                 field: address_id
-      - name: order_status_id
+      - name: status
         data_type: varchar
         constraints:
           - type: not_null
-          - type: foreign_key
-            to: ref('stg_sql_server_dbo__order_status')
-            to_columns: [order_status_id]
         description: >
           Id para el seguimiento del pedido.
         tests:
           - not_null
-          - relationships:
-                to: ref('stg_sql_server_dbo__order_status')
-                field: order_status_id
       - name: order_cost
         data_type: float
         constraints:
@@ -443,20 +411,14 @@ models:
           Precio total del pedido después de añadir coste de envío y aplicar promoción.
         tests:
           - not_null
-      - name: shipping_service_id
+      - name: shipping_service
         data_type: varchar
         constraints:
           - type: not_null
-          - type: foreign_key
-            to: ref('stg_sql_server_dbo__shipping_services')
-            to_columns: [shipping_service_id]
         description: >
           Servicio de envío asociado al pedido.
         tests:
           - not_null
-          - relationships:
-                to: ref('stg_sql_server_dbo__shipping_services')
-                field: shipping_service_id
       - name: tracking_id
         data_type: varchar
         constraints:
@@ -576,22 +538,6 @@ models:
           - relationships:
                 to: ref('stg_sql_server_dbo__products')
                 field: product_id
-      - name: is_deleted
-        data_type: boolean
-        constraints:
-          - type: not_null
-        description: >
-          Indica si el registro ha sido borrado en la base de datos de origen.
-        tests:
-          - not_null
-      - name: date_load
-        data_type: timestamp_tz
-        constraints:
-          - type: not_null
-        description: >
-          Fecha en que se cargaron los datos.
-        tests:
-          - not_null
 
   - name: stg_sql_server_dbo__products
     config:
@@ -826,12 +772,28 @@ models:
           Número de teléfono del usuario.
         tests:
           - not_null
+      - name: is_valid_us_phone
+        data_type: boolean
+        constraints:
+          - type: not_null
+        description: >
+          Indica si teléfono es válido.
+        tests:
+          - not_null
       - name: email
         data_type: varchar
         constraints:
           - type: not_null
         description: >
           Correo electrónico del usuario.
+        tests:
+          - not_null
+      - name: is_valid_email
+        data_type: boolean
+        constraints:
+          - type: not_null
+        description: >
+          Indica si email es válido.
         tests:
           - not_null
       - name: created_at_date
