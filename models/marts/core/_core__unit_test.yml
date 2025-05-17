@@ -1,7 +1,7 @@
 unit_tests:
   - name: test_is_valid_email
     description: "Check if email is valid"
-    model: users
+    model: dim_user
     given:
       - input: ref('stg_sql_server_dbo__users')
         rows:

@@ -25,7 +25,7 @@ renamed_casted AS (
         LPAD(CAST(zipcode AS VARCHAR), 5, '0') AS zipcode,
         CAST(state AS VARCHAR(256)) AS state,
         CAST(country AS VARCHAR(256)) AS country,
-        CAST(IFNULL(_fivetran_deleted, FALSE) AS BOOLEAN) AS is_delete,
+        CAST(IFNULL(_fivetran_deleted, FALSE) AS BOOLEAN) AS is_deleted,
         CONVERT_TIMEZONE('UTC', CAST(_fivetran_synced AS TIMESTAMP_TZ)) AS date_load
     FROM src_addresses
     )

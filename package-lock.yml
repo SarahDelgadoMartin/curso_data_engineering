@@ -8,13 +8,7 @@ packages:
   - name: dbt_expectations
     package: metaplane/dbt_expectations
     version: 0.10.8
-  - name: elementary
-    package: elementary-data/elementary
-    version: 0.18.2
-  - name: dbt_constraints
-    package: Snowflake-Labs/dbt_constraints
-    version: 1.0.4
   - name: dbt_date
     package: godatadriven/dbt_date
     version: 0.13.0
-sha1_hash: be8e035914ce32432b8d0258c5cc918ad61cbb41
+sha1_hash: ef017c9e5e6d3ff86ae392b3ebaf2dc13f336362

@@ -1,5 +1,7 @@
 {{ 
-    config(materialized='table') 
+    config(materialized='table',
+    enabled=false
+    )
 }}
 
 {% set end_date = get_future_date(2) %}

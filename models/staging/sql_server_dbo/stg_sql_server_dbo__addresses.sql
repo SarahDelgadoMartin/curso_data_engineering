@@ -25,7 +25,7 @@ renamed_casted AS (
         {{ dbt_utils.generate_surrogate_key(['zipcode']) }} AS zipcode_id,
         state,
         country,
-        is_delete,
+        is_deleted,
         date_load
     FROM base_addresses
     ),

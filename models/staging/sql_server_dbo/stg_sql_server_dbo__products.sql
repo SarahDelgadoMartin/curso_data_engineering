@@ -19,13 +19,7 @@ WITH base_products AS (
 
 base_product_details AS (
     SELECT * 
-    FROM {{ ref('stg_own_data__product_details') }}
-
-    {% if is_incremental() %}
-
-	WHERE _fivetran_synced > (SELECT MAX(date_load) FROM {{ this }} )
-
-    {% endif %}
+    FROM {{ ref('base_own_data__product_details') }}
     ),
 
 renamed_casted AS (
@@ -38,7 +32,7 @@ renamed_casted AS (
         bpd.product_weight_kg,
         bpd.care_level,
         bpd.mature_size,
-        bp.is_delete,
+        bp.is_deleted,
         bp.date_load
     FROM base_products bp
     INNER JOIN base_product_details bpd 

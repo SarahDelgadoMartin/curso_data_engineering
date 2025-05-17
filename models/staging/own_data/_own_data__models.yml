@@ -1,0 +1,366 @@
+version: 2
+
+models:
+  - name: stg_own_data__dates
+    config:
+      contract:
+        enforced: true
+    description: >
+      Contiene varias dimensiones de fecha.
+    columns:
+      - name: date_day
+        data_type: date
+        constraints:
+          - type: primary_key
+          - type: not_null
+          - type: unique
+        description: >
+          La fecha específica.
+        tests:
+          - not_null
+          - unique
+      - name: prior_date_day
+        data_type: date
+        constraints:
+          - type: not_null
+        description: >
+          El día inmediatamente anterior a date_day.
+        tests:
+          - not_null
+      - name: next_date_day
+        data_type: date
+        constraints:
+          - type: not_null
+        description: >
+          El día inmediatamente posterior a date_day.
+        tests:
+          - not_null
+      - name: prior_year_date_day
+        data_type: date
+        constraints:
+          - type: not_null
+        description: >
+          La fecha correspondiente en el año anterior.
+        tests:
+          - not_null
+      - name: prior_year_over_year_date_day
+        data_type: date
+        constraints:
+          - type: not_null
+        description: >
+          La fecha correspondiente dos años antes de date_day.
+        tests:
+          - not_null
+      - name: day_of_week
+        data_type: number
+        constraints:
+          - type: not_null
+        description: >
+          El día de la semana (ej. 1 para lunes 7 para domingo).
+        tests:
+          - not_null
+      - name: day_of_week_iso
+        data_type: number
+        constraints:
+          - type: not_null
+        description: >
+          El día de la semana según la norma iso 8601 (ej. 1 para lunes 7 para domingo).
+        tests:
+          - not_null
+      - name: day_of_week_name
+        data_type: varchar
+        constraints:
+          - type: not_null
+        description: >
+          El nombre completo del día de la semana (ej. lunes).
+        tests:
+          - not_null
+      - name: day_of_week_name_short
+        data_type: varchar
+        constraints:
+          - type: not_null
+        description: >
+          La abreviatura del nombre del día de la semana (ej. lun).
+        tests:
+          - not_null
+      - name: day_of_month
+        data_type: number
+        constraints:
+          - type: not_null
+        description: >
+          El día del mes (1-31).
+        tests:
+          - not_null
+      - name: day_of_year
+        data_type: number
+        constraints:
+          - type: not_null
+        description: >
+          El día del año (1-365 o 366).
+        tests:
+          - not_null
+      - name: week_start_date
+        data_type: date
+        constraints:
+          - type: not_null
+        description: >
+          La fecha de inicio de la semana.
+        tests:
+          - not_null
+      - name: week_end_date
+        data_type: date
+        constraints:
+          - type: not_null
+        description: >
+          La fecha de fin de la semana.
+        tests:
+          - not_null
+      - name: prior_year_week_start_date
+        data_type: date
+        constraints:
+          - type: not_null
+        description: >
+          La fecha de inicio de la semana correspondiente en el año anterior.
+        tests:
+          - not_null
+      - name: prior_year_week_end_date
+        data_type: date
+        constraints:
+          - type: not_null
+        description: >
+          La fecha de fin de la semana correspondiente en el año anterior.
+        tests:
+          - not_null
+      - name: week_of_year
+        data_type: number
+        constraints:
+          - type: not_null
+        description: >
+          El número de la semana del año.
+        tests:
+          - not_null
+      - name: iso_week_start_date
+        data_type: date
+        constraints:
+          - type: not_null
+        description: >
+          La fecha de inicio de la semana según la norma iso 8601.
+        tests:
+          - not_null
+      - name: iso_week_end_date
+        data_type: date
+        constraints:
+          - type: not_null
+        description: >
+          La fecha de fin de la semana según la norma iso 8601.
+        tests:
+          - not_null
+      - name: prior_year_iso_week_start_date
+        data_type: date
+        constraints:
+          - type: not_null
+        description: >
+          La fecha de inicio de la semana correspondiente según la norma iso 8601 en el año anterior.
+        tests:
+          - not_null
+      - name: prior_year_iso_week_end_date
+        data_type: date
+        constraints:
+          - type: not_null
+        description: >
+          La fecha de fin de la semana correspondiente según la norma iso 8601 en el año anterior.
+        tests:
+          - not_null
+      - name: iso_week_of_year
+        data_type: number
+        constraints:
+          - type: not_null
+        description: >
+          El número de la semana del año según la norma iso 8601.
+        tests:
+          - not_null
+      - name: prior_year_week_of_year
+        data_type: number
+        constraints:
+          - type: not_null
+        description: >
+          El número de la semana correspondiente en el año anterior.
+        tests:
+          - not_null
+      - name: prior_year_iso_week_of_year
+        data_type: number
+        constraints:
+          - type: not_null
+        description: >
+          El número de la semana correspondiente según la norma iso 8601 en el año anterior.
+        tests:
+          - not_null
+      - name: month_of_year
+        data_type: number
+        constraints:
+          - type: not_null
+        description: >
+          El número del mes del año (1-12).
+        tests:
+          - not_null
+      - name: month_name
+        data_type: varchar
+        constraints:
+          - type: not_null
+        description: >
+          El nombre completo del mes (ej. enero).
+        tests:
+          - not_null
+      - name: month_name_short
+        data_type: varchar
+        constraints:
+          - type: not_null
+        description: >
+          La abreviatura del nombre del mes (ej. ene).
+        tests:
+          - not_null
+      - name: month_start_date
+        data_type: date
+        constraints:
+          - type: not_null
+        description: >
+          El primer día del mes.
+        tests:
+          - not_null
+      - name: month_end_date
+        data_type: date
+        constraints:
+          - type: not_null
+        description: >
+          El último día del mes.
+        tests:
+          - not_null
+      - name: prior_year_month_start_date
+        data_type: date
+        constraints:
+          - type: not_null
+        description: >
+          El primer día del mes correspondiente en el año anterior.
+        tests:
+          - not_null
+      - name: prior_year_month_end_date
+        data_type: date
+        constraints:
+          - type: not_null
+        description: >
+          El último día del mes correspondiente en el año anterior.
+        tests:
+          - not_null
+      - name: quarter_of_year
+        data_type: number
+        constraints:
+          - type: not_null
+        description: >
+          El número del trimestre del año (1-4).
+        tests:
+          - not_null
+      - name: quarter_start_date
+        data_type: date
+        constraints:
+          - type: not_null
+        description: >
+          El primer día del trimestre.
+        tests:
+          - not_null
+      - name: quarter_end_date
+        data_type: date
+        constraints:
+          - type: not_null
+        description: >
+          El último día del trimestre.
+        tests:
+          - not_null
+      - name: year_number
+        data_type: number
+        constraints:
+          - type: not_null
+        description: >
+          El número del año.
+        tests:
+          - not_null
+      - name: year_start_date
+        data_type: date
+        constraints:
+          - type: not_null
+        description: >
+          El primer día del año.
+        tests:
+          - not_null
+      - name: year_end_date
+        data_type: date
+        constraints:
+          - type: not_null
+        description: >
+          El último día del año.
+        tests:
+          - not_null
+
+  - name: stg_own_data__zipcode_data
+    config:
+      contract:
+        enforced: true
+    description: >
+      Información correspondiente a cada código postal.
+    columns:
+      - name: zipcode_id
+        data_type: varchar
+        constraints:
+          - type: primary_key
+          - type: not_null
+          - type: unique
+        description: >
+          Id único del código postal hasheado.
+      - name: zipcode
+        data_type: varchar
+        constraints:
+          - type: not_null
+        description: >
+          Código postal en versión de 5 dígitos.
+        tests:
+          - not_null
+          - unique
+      - name: city
+        data_type: varchar
+        constraints:
+          - type: not_null
+        description: >
+          Nombre de la ciudad asociada al código postal.
+        tests:
+          - not_null
+      - name: state_code
+        data_type: varchar
+        constraints:
+          - type: not_null
+        description: >
+          Código del estado.
+        tests:
+          - not_null
+      - name: latitude
+        data_type: float
+        constraints:
+          - type: not_null
+        description: >
+          Latitud aproximada del área correspondiente al código postal.
+        tests:
+          - not_null
+      - name: longitude
+        data_type: float
+        constraints:
+          - type: not_null
+        description: >
+          Latitud aproximada del área correspondiente al código postal.
+        tests:
+          - not_null
+      - name: population
+        data_type: int
+        constraints:
+          - type: not_null
+        description: >
+          Población aproximada del área correspondiente al código postal.
+        tests:
+          - not_null
