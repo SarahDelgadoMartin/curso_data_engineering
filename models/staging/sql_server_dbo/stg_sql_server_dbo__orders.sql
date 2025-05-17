@@ -35,7 +35,7 @@ renamed_casted AS (
         TIME(delivered_at) AS delivered_at_time,
         DATE(created_at) AS created_at_date,
         TIME(created_at) AS created_at_time,
-        is_delete,
+        is_deleted,
         date_load
     FROM base_orders
     )

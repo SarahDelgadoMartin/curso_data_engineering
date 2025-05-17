@@ -17,7 +17,7 @@ renamed_casted AS (
         CAST(state_code AS VARCHAR) AS state_code,
         CAST(latitude AS FLOAT) AS latitude,
         CAST(longitude AS FLOAT) AS longitude,
-        CAST(population AS INT) AS population
+        CAST(IFNULL(population, 0) AS INT) AS population
     FROM src_zipcode
     )
 

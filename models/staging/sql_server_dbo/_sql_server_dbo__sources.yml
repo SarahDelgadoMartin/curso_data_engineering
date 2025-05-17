@@ -125,7 +125,7 @@ sources:
             description: >
               Servicio de envío asociado al pedido.
             tests:
-              - not null
+              - not_null
           - name: shipping_cost
             description: >
               Precio del servicio de envío asociado al pedido.
@@ -304,22 +304,22 @@ sources:
             description: >
               Id de la dirección del usuario.
             tests:
-              - not null
+              - not_null
           - name: last_name
             description: >
               Apellido del usuario.
             tests:
-              - not null
+              - not_null
           - name: created_at
             description: >
               Fecha de creación del registro.
             tests:
-              - not null
+              - not_null
           - name: phone_number
             description: >
               Número de teléfono del usuario.
             tests:
-              - not null
+              - not_null
           - name: total_orders
             description: >
               Total de pedidos realizados por el usuario.
@@ -327,12 +327,12 @@ sources:
             description: >
               Nombre del usuario.
             tests:
-              - not null
+              - not_null
           - name: email
             description: >
               Correo electrónico del usuario.
             tests:
-              - not null
+              - not_null
           - name: _fivetran_deleted
             description: >
               Indica si el registro ha sido borrado en la base de datos de origen.

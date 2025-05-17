@@ -1,6 +1,8 @@
 {{
   config(
-    materialized='incremental'
+    materialized='incremental',
+    unique_key='promo_id',
+    on_schema_change='append_new_columns'
   )
     }}
 
@@ -27,13 +29,13 @@ WITH src_promos AS (
 renamed_casted AS (
     SELECT
         {{ dbt_utils.generate_surrogate_key(['promo_id']) }} AS promo_id,
-        CAST(promo_id AS VARCHAR(50)) AS desc_promo,
-        CAST(discount AS INT) AS discount_on_units,
+        CAST(promo_id AS VARCHAR) AS desc_promo,
+        CAST(discount AS FLOAT) AS discount_on_units,
         CAST(CASE status
             WHEN 'inactive' THEN FALSE
             WHEN 'active' THEN TRUE
         END AS BOOLEAN) AS is_active,
-        CAST(IFNULL(FALSE, _fivetran_deleted) AS BOOLEAN) AS is_delete,
+        CAST(IFNULL(FALSE, _fivetran_deleted) AS BOOLEAN) AS is_deleted,
         CONVERT_TIMEZONE('UTC', CAST(_fivetran_synced AS TIMESTAMP_TZ)) AS date_load
     FROM src_promos
     ) 

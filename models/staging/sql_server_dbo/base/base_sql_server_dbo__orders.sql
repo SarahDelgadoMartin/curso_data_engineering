@@ -64,7 +64,7 @@ renamed_casted AS (
                     ) AS TIMESTAMP_TZ
                 )
             ) AS created_at_timestamp,
-        CAST(IFNULL(_fivetran_deleted, FALSE) AS BOOLEAN) AS is_delete,
+        CAST(IFNULL(_fivetran_deleted, FALSE) AS BOOLEAN) AS is_deleted,
         CONVERT_TIMEZONE('UTC', CAST(_fivetran_synced AS TIMESTAMP_TZ)) AS date_load
     FROM src_orders
     )

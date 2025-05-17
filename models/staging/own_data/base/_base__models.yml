@@ -1,0 +1,37 @@
+version: 2
+
+models:
+  - name: base_own_data__product_details
+    description: >
+      Detalles de los productos.
+    columns:
+      - name: product_id
+        description: >
+          Id único del producto.
+        tests:
+          - not_null
+          - unique
+      - name: plant_group
+        description: >
+          Grupo al que pertenece la planta.
+        tests:
+          - not_null
+      - name: product_weight_kg
+        description: >
+          Peso del producto en kilogramos.
+        tests:
+          - not_null
+      - name: care_level
+        description: >
+          Nivel de cuidados que requiere la planta.
+        tests:
+          - not_null
+          - accepted_values:
+              values: ["beginner", "intermediate", "expert"]
+      - name: mature_size
+        description: >
+          Tamaño al que llega la planta al terminar de crecer.
+        tests:
+          - not_null
+          - accepted_values:
+              values: ["small", "medium", "large"]

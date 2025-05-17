@@ -19,28 +19,28 @@ models:
         tests:
           - not_null
           - unique 
-      - name: zipcode
+      - name: street
+        data_type: varchar
+        constraints:
+          - type: not_null
+        description: >
+          Vía de la vivienda.
+        tests:
+          - not_null
+      - name: number
         data_type: int
         constraints:
           - type: not_null
         description: >
+          Número de la vivienda.
+        tests:
+          - not_null
+      - name: zipcode
+        data_type: varchar
+        constraints:
+          - type: not_null
+        description: >
           Código postal.
-        tests:
-          - not_null
-      - name: country
-        data_type: varchar
-        constraints:
-          - type: not_null
-        description: >
-          País.
-        tests:
-          - not_null
-      - name: address
-        data_type: varchar
-        constraints:
-          - type: not_null
-        description: >
-          Nombre de la vía y número de la dirección.
         tests:
           - not_null
       - name: state
@@ -51,6 +51,14 @@ models:
           Estado (Localización).
         tests:
           - not_null
+      - name: country
+        data_type: varchar
+        constraints:
+          - type: not_null
+        description: >
+          País.
+        tests:
+          - not_null
       - name: is_deleted
         data_type: boolean
         constraints:
@@ -58,7 +66,7 @@ models:
         description: >
           Indica si el registro ha sido borrado en la base de datos de origen.
         tests:
-          - not null
+          - not_null
       - name: date_load
         data_type: timestamp_tz
         constraints:
@@ -102,7 +110,7 @@ models:
           Tipo de evento realizado por el usuario en la web.
         tests:
           - accepted_values:
-              values: ['ckeckout', 'package_shipped', 'add_to_cart', 'page_view']
+              values: ['checkout', 'package_shipped', 'add_to_cart', 'page_view']
       - name: user_id
         data_type: varchar
         constraints:
@@ -143,14 +151,14 @@ models:
           Id de la orden del producto en caso de que el usuario lo haya comprado.
         tests:
           - not_null
-      - name: is_delete
+      - name: is_deleted
         data_type: boolean
         constraints:
           - type: not_null
         description: >
           Indica si el registro ha sido borrado en la base de datos de origen.
         tests:
-          - not null
+          - not_null
       - name: date_load
         data_type: timestamp_tz
         constraints:
@@ -167,7 +175,7 @@ models:
     description: >
       Productos asociados a cada pedido de la tabla orders.
     columns:
-      - name: order_items_id
+      - name: order_item_id
         data_type: varchar
         constraints:
           - type: primary_key
@@ -209,7 +217,7 @@ models:
         description: >
           Indica si el registro ha sido borrado en la base de datos de origen.
         tests:
-          - not null
+          - not_null
       - name: date_load
         data_type: timestamp_tz
         constraints:
@@ -280,7 +288,7 @@ models:
         tests:
           - not_null
       - name: shipping_cost
-        data_type: varchar
+        data_type: float
         constraints:
           - type: not_null
         description: >
@@ -302,9 +310,7 @@ models:
         description: >
           Servicio de envío asociado al pedido.
         tests:
-          - not null
-          - accepted_values:
-              values: ['ups', 'usps', 'dhl', 'fedex', '']
+          - not_null
       - name: tracking_id
         data_type: varchar
         constraints:
@@ -349,6 +355,120 @@ models:
           Fecha en que se cargaron los datos.
         tests:
           - not_null
+  
+  - name: base_sql_server_dbo__product_details
+    config:
+      contract:
+        enforced: true
+    description: >
+      Conjunto de productos disponibles.
+    columns:
+      - name: product_id
+        data_type: varchar
+        constraints:
+          - type: primary_key
+          - type: not_null
+          - type: unique
+        description: >
+          Id del producto hasheado.
+        tests:
+          - not_null
+          - unique
+      - name: plant_group
+        data_type: varchar
+        constraints:
+          - type: not_null
+        description: >
+          Grupo al que pertenece la planta.
+        tests:
+          - not_null
+      - name: product_weight_kg
+        data_type: float
+        constraints:
+          - type: not_null
+        description: >
+          Peso del producto en kilogramos.
+        tests:
+          - not_null
+      - name: care_level
+        data_type: varchar
+        constraints:
+          - type: not_null
+        description: >
+          Nivel de cuidados que requiere la planta.
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['beginner', 'intermediate', 'expert']
+      - name: mature_size
+        data_type: varchar
+        constraints:
+          - type: not_null
+        description: >
+          Tamaño al que llega la planta al terminar de crecer.
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['small', 'medium', 'large']
+
+  - name: base_sql_server_dbo__products
+    config:
+      contract:
+        enforced: true
+    description: >
+      Conjunto de productos disponibles.
+    columns:
+      - name: product_id
+        data_type: varchar
+        constraints:
+          - type: primary_key
+          - type: not_null
+          - type: unique
+        description: >
+          Id del producto hasheado.
+        tests:
+          - not_null
+          - unique
+      - name: price
+        data_type: float
+        constraints:
+          - type: not_null
+        description: >
+          Precio del producto.
+        tests:
+          - not_null
+      - name: name
+        data_type: varchar
+        constraints:
+          - type: not_null
+        description: >
+          Nombre del producto.
+        tests:
+          - not_null
+      - name: inventory
+        data_type: int
+        constraints:
+          - type: not_null
+        description: >
+          Cantidad de producto disponible.
+        tests:
+          - not_null
+      - name: is_deleted
+        data_type: boolean
+        constraints:
+          - type: not_null
+        description: >
+          Indica si el registro ha sido borrado en la base de datos de origen.
+        tests:
+          - not_null
+      - name: date_load
+        data_type: timestamp_tz
+        constraints:
+          - type: not_null
+        description: >
+          Fecha en que se cargaron los datos.
+        tests:
+          - not_null
 
   - name: base_sql_server_dbo__users
     config:
@@ -375,7 +495,7 @@ models:
         description: >
           Apellido del usuario.
         tests:
-          - not null
+          - not_null
       - name: first_name
         data_type: varchar
         constraints:
@@ -383,7 +503,7 @@ models:
         description: >
           Nombre del usuario.
         tests:
-          - not null
+          - not_null
       - name: address_id
         data_type: varchar
         constraints:
@@ -391,7 +511,7 @@ models:
         description: >
           Id de la dirección del usuario.
         tests:
-          - not null
+          - not_null
       - name: phone_number
         data_type: varchar
         constraints:
@@ -399,7 +519,7 @@ models:
         description: >
           Número de teléfono del usuario.
         tests:
-          - not null
+          - not_null
       - name: email
         data_type: varchar
         constraints:
@@ -407,7 +527,7 @@ models:
         description: >
           Correo electrónico del usuario.
         tests:
-          - not null
+          - not_null
       - name: created_at_timestamp
         data_type: timestamp_tz
         constraints:
@@ -415,7 +535,7 @@ models:
         description: >
           Fecha de creación del registro.
         tests:
-          - not null
+          - not_null
       - name: updated_at_timestamp
         data_type: timestamp_tz
         constraints:
@@ -423,7 +543,7 @@ models:
         description: >
           Fecha de la última actualización de los datos del usuario.
         tests:
-          - not null
+          - not_null
       - name: is_deleted
         data_type: boolean
         constraints:

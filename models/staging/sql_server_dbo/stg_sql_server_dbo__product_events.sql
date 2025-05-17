@@ -1,7 +1,8 @@
 {{
   config(
     materialized='incremental',
-    unique_key='product_event_id'
+    unique_key='product_event_id',
+    on_schema_change='append_new_columns'
   )
     }}
 
@@ -23,7 +24,7 @@ renamed_casted AS (
         {{ dbt_utils.generate_surrogate_key(['event_id', 'product_id']) }} AS product_event_id,
         event_id,
         product_id,
-        is_delete,
+        is_deleted,
         date_load
     FROM base_events
 
