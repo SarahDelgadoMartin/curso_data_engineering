@@ -1,8 +1,6 @@
 {{
   config(
-    materialized='incremental',
-    unique_key='promo_id',
-    on_schema_change='append_new_columns'
+    materialized='view'
   )
     }}
 

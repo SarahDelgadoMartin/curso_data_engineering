@@ -31,10 +31,13 @@ renamed_casted AS (
         tracking_id,
         DATE(estimated_delivery_at_timestamp) AS estimated_delivery_at_date,
         TIME(estimated_delivery_at_timestamp) AS estimated_delivery_at_time,
+        estimated_delivery_at_timestamp,
         DATE(delivered_at_timestamp) AS delivered_at_date,
         TIME(delivered_at_timestamp) AS delivered_at_time,
+        delivered_at_timestamp,
         DATE(created_at_timestamp) AS created_at_date,
         TIME(created_at_timestamp) AS created_at_time,
+        created_at_timestamp,
         is_deleted,
         date_load
     FROM base_orders

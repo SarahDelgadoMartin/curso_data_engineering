@@ -299,6 +299,14 @@ models:
           El último día del año.
         tests:
           - not_null
+      - name: iso_year_week
+        data_type: varchar
+        constraints:
+          - type: not_null
+        description: >
+          El año y el número de semana ISO (ej. 2023-W52).
+        tests:
+          - not_null
 
   - name: stg_own_data__zipcode_data
     config:

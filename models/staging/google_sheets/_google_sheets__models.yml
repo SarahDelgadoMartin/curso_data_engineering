@@ -59,6 +59,14 @@ models:
           Año asociado a cada objetivo.
         tests:
           - not_null
+      - name: date
+        data_type: date
+        constraints:
+          - type: not_null
+        description: >
+          Fecha del final del mes asociada a cada objetivo.
+        tests:
+          - not_null
       - name: date_load
         data_type: timestamp_tz
         constraints:

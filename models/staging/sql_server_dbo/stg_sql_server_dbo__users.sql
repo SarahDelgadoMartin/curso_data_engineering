@@ -35,8 +35,10 @@ renamed_casted AS (
             END AS BOOLEAN) AS is_valid_email,
         DATE(created_at_timestamp) AS created_at_date,
         TIME(created_at_timestamp) AS created_at_time,
+        created_at_timestamp,
         DATE(updated_at_timestamp) AS updated_at_date,
         TIME(updated_at_timestamp) AS updated_at_time,
+        updated_at_timestamp,
         is_deleted,
         date_load
     FROM base_users

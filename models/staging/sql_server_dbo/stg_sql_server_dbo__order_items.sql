@@ -17,6 +17,13 @@ WITH base_order_items AS (
     {% endif %}
     ),
 
+base_order AS (
+    SELECT 
+        product_id,
+        price AS product_price
+    FROM {{ ref('base_sql_server_dbo__products') }}
+),
+
 final AS (
     SELECT
         boi.order_item_id,
@@ -27,7 +34,7 @@ final AS (
         boi.is_deleted,
         boi.date_load
     FROM base_order_items boi
-    INNER JOIN {{ ref('base_sql_server_dbo__products') }} bp
+    INNER JOIN base_order bp
        ON boi.product_id = bp.product_id 
     )
 
