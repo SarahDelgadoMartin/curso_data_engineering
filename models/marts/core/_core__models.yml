@@ -1,0 +1,76 @@
+version: 2
+
+models:
+  - name: fct_budget
+    config:
+      contract:
+        enforced: true
+    description: >
+      Contiene información limpia y estandarizada del objetivo mensual de ventas por producto.
+    columns:
+      - name: budget_id
+        data_type: varchar
+        constraints:
+          - type: primary_key
+          - type: not_null
+          - type: unique
+        description: >
+          Id única del registro hasheado.
+        tests:
+          - not_null
+          - unique
+      - name: product_id
+        data_type: varchar
+        constraints:
+          - type: foreign_key
+            to: ref('stg_sql_server_dbo__products')
+            to_columns: [product_id]
+          - type: not_null
+        description: >
+          Id única para cada producto.
+        tests:
+          - not_null
+          - relationships:
+                to: ref('stg_sql_server_dbo__products')
+                field: product_id  
+      - name: target_quantity
+        data_type: int
+        constraints:
+          - type: not_null
+        description: >
+          Número de unidades por cada producto y cada mes por producto. 
+        tests:
+          - not_null
+          - positive_values
+      - name: month
+        data_type: int
+        constraints:
+          - type: not_null
+        description: >
+          Mes asociado a cada objetivo.
+        tests:
+          - not_null
+      - name: year
+        data_type: int
+        constraints:
+          - type: not_null
+        description: >
+          Año asociado a cada objetivo.
+        tests:
+          - not_null
+      - name: date
+        data_type: date
+        constraints:
+          - type: not_null
+        description: >
+          Fecha del final del mes asociada a cada objetivo.
+        tests:
+          - not_null
+      - name: date_load
+        data_type: timestamp_tz
+        constraints:
+          - type: not_null
+        description: >
+          Fecha en que se cargaron los datos.
+        tests:
+          - not_null
