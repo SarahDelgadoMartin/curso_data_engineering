@@ -16,6 +16,7 @@ renamed_casted AS (
         target_quantity,
         MONTH(date) AS month,
         YEAR(date) AS year,
+        date AS date,
         date_load
     FROM src_budget
     )

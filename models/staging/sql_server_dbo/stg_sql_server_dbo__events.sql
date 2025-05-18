@@ -24,8 +24,11 @@ renamed_casted AS (
         user_id,
         session_id,
         event_type,
+        product_id,
+        order_id,
         DATE(created_at_timestamp) AS created_at_date,
         TIME(created_at_timestamp) AS created_at_time,
+        created_at_timestamp,
         is_deleted,
         date_load
     FROM base_events

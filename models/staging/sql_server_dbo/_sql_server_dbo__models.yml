@@ -131,20 +131,50 @@ models:
           - not_null
           - accepted_values:
               values: ['checkout', 'package_shipped', 'add_to_cart', 'page_view']
+      - name: product_id
+        data_type: varchar
+        constraints:
+          - type: not_null
+        description: >
+          Id del producto.
+        tests:
+          - not_null
+      - name: order_id
+        data_type: varchar
+        constraints:
+          - type: not_null
+        description: >
+          Id del pedido.
+        tests:
+          - not_null
       - name: created_at_date
         data_type: date
         constraints:
           - type: not_null
+          - type: foreign_key
+            to: ref('stg_own_data__dates')
+            to_columns: [date_day]
         description: >
           Fecha en la que se añadió el registro a la tabla.
         tests:
           - not_null
+          - relationships:
+                to: ref('stg_own_data__dates')
+                field: date_day
       - name: created_at_time
         data_type: time
         constraints:
           - type: not_null
         description: >
           Hora en la que se añadió el registro a la tabla.
+        tests:
+          - not_null
+      - name: created_at_timestamp
+        data_type: timestamp_tz
+        constraints:
+          - type: not_null
+        description: >
+          Fecha en timestamp en la que se añadió el registro a la tabla.
         tests:
           - not_null
       - name: is_deleted
@@ -162,54 +192,7 @@ models:
         description: >
           Fecha en que se cargaron los datos.
         tests:
-          - not_null
-
-  - name: stg_sql_server_dbo__order_events
-    config:
-      contract:
-        enforced: true
-    description: >
-      Contiene eventos de pedidos.
-    columns:
-      - name: order_event_id
-        data_type: varchar
-        constraints:
-          - type: primary_key
-          - type: not_null
-          - type: unique
-        description: >
-          Id único del registro hasheado.
-        tests:
-          - not_null
-          - unique
-      - name: event_id
-        data_type: varchar
-        constraints:
-          - type: not_null
-          - type: foreign_key
-            to: ref('stg_sql_server_dbo__events')
-            to_columns: [event_id]
-        description: >
-          Idr del evento.
-        tests:
-          - not_null
-          - relationships:
-                to: ref('stg_sql_server_dbo__events')
-                field: event_id
-      - name: order_id
-        data_type: varchar
-        constraints:
-          - type: not_null
-          - type: foreign_key
-            to: ref('stg_sql_server_dbo__orders')
-            to_columns: [order_id]
-        description: >
-          Id del pedido.
-        tests:
-          - not_null
-          - relationships:
-                to: ref('stg_sql_server_dbo__orders')
-                field: order_id
+          - not_null     
 
   - name: stg_sql_server_dbo__order_items
     config:
@@ -370,7 +353,7 @@ models:
         constraints:
           - type: not_null
         description: >
-          Id para el seguimiento del pedido.
+          Estado del pedido.
         tests:
           - not_null
       - name: order_cost
@@ -431,10 +414,16 @@ models:
         data_type: date
         constraints:
           - type: not_null
+          - type: foreign_key
+            to: ref('stg_own_data__dates')
+            to_columns: [date_day]
         description: >
           Fecha estimada de entrega del pedido.
         tests:
           - not_null
+          - relationships:
+                to: ref('stg_own_data__dates')
+                field: date_day
       - name: estimated_delivery_at_time
         data_type: time
         constraints:
@@ -443,14 +432,24 @@ models:
           Hora estimada de entrega del pedido.
         tests:
           - not_null
+      - name: estimated_delivery_at_timestamp
+        data_type: timestamp_tz
+        description: >
+          Fecha en timestamp estimada de entrega del pedido.
       - name: delivered_at_date
         data_type: date
         constraints:
           - type: not_null
+          - type: foreign_key
+            to: ref('stg_own_data__dates')
+            to_columns: [date_day]
         description: >
           Fecha de entrega del pedido.
         tests:
           - not_null
+          - relationships:
+                to: ref('stg_own_data__dates')
+                field: date_day
       - name: delivered_at_time
         data_type: time
         constraints:
@@ -459,20 +458,38 @@ models:
           Hora de entrega del pedido.
         tests:
           - not_null
+      - name: delivered_at_timestamp
+        data_type: timestamp_tz
+        description: >
+          Fecha en timestamp de entrega del pedido.
       - name: created_at_date
         data_type: date
         constraints:
           - type: not_null
+          - type: foreign_key
+            to: ref('stg_own_data__dates')
+            to_columns: [date_day]
         description: >
           Fecha en la que se añadió el registro a la tabla.
         tests:
           - not_null
+          - relationships:
+                to: ref('stg_own_data__dates')
+                field: date_day
       - name: created_at_time
         data_type: time
         constraints:
           - type: not_null
         description: >
           Hora en la que se añadió el registro a la tabla.
+        tests:
+          - not_null
+      - name: created_at_timestamp
+        data_type: timestamp_tz
+        constraints:
+          - type: not_null
+        description: >
+          Fecha en timestamp en la que se añadió el registro a la tabla.
         tests:
           - not_null
       - name: is_deleted
@@ -491,53 +508,6 @@ models:
           Fecha en que se cargaron los datos.
         tests:
           - not_null
-
-  - name: stg_sql_server_dbo__product_events
-    config:
-      contract:
-        enforced: true
-    description: >
-      Contiene eventos de productos. 
-    columns:
-      - name: product_event_id
-        data_type: varchar
-        constraints:
-          - type: primary_key
-          - type: not_null
-          - type: unique
-        description: >
-          Id único del registro hasheado.
-        tests:
-          - not_null
-          - unique
-      - name: event_id
-        data_type: varchar
-        constraints:
-          - type: not_null
-          - type: foreign_key
-            to: ref('stg_sql_server_dbo__events')
-            to_columns: [event_id]
-        description: >
-          Id del evento.
-        tests:
-          - not_null
-          - relationships:
-                to: ref('stg_sql_server_dbo__events')
-                field: event_id
-      - name: product_id
-        data_type: varchar
-        constraints:
-          - type: not_null
-          - type: foreign_key
-            to: ref('stg_sql_server_dbo__products')
-            to_columns: [product_id]
-        description: >
-          Id del producto.
-        tests:
-          - not_null
-          - relationships:
-                to: ref('stg_sql_server_dbo__products')
-                field: product_id
 
   - name: stg_sql_server_dbo__products
     config:
@@ -800,10 +770,16 @@ models:
         data_type: date
         constraints:
           - type: not_null
+          - type: foreign_key
+            to: ref('stg_own_data__dates')
+            to_columns: [date_day]
         description: >
           Fecha de creación del registro.
         tests:
           - not_null
+          - relationships:
+                to: ref('stg_own_data__dates')
+                field: date_day
       - name: created_at_time
         data_type: time
         constraints:
@@ -812,14 +788,28 @@ models:
           Hora de creación del registro.
         tests:
           - not_null
+      - name: created_at_timestamp
+        data_type: timestamp_tz
+        constraints:
+          - type: not_null
+        description: >
+          Fecha en timestamp de creación del registro.
+        tests:
+          - not_null
       - name: updated_at_date
         data_type: date
         constraints:
           - type: not_null
+          - type: foreign_key
+            to: ref('stg_own_data__dates')
+            to_columns: [date_day]
         description: >
           Fecha de la última actualización de los datos del usuario.
         tests:
           - not_null
+          - relationships:
+                to: ref('stg_own_data__dates')
+                field: date_day
       - name: updated_at_time
         data_type: time
         constraints:
@@ -828,6 +818,10 @@ models:
           Hora de la última actualización de los datos del usuario.
         tests:
           - not_null
+      - name: updated_at_timestamp
+        data_type: timestamp_tz
+        description: >
+          Fecha en timestamp de la última actualización de los datos del usuario.
       - name: is_deleted
         data_type: boolean
         constraints:
