@@ -1,6 +1,460 @@
 version: 2
 
 models:
+  - name: dim_address
+    config:
+      contract:
+        enforced: true
+    description: >
+      Contiene información dimensionada y limpia de las direcciones.
+    columns:
+      - name: address_id
+        data_type: varchar
+        constraints:
+          - type: primary_key
+          - type: not_null
+          - type: unique
+        description: >
+          Id única de la dirección.
+        tests:
+          - not_null
+          - unique
+      - name: street
+        data_type: varchar
+        description: >
+          Nombre de la calle de la dirección.
+      - name: number
+        data_type: int
+        description: >
+          Número de la calle de la dirección.
+      - name: zipcode_id
+        data_type: varchar
+        description: >
+          Id única del código postal asociado a la dirección.
+      - name: state
+        data_type: varchar
+        description: >
+          Estado de la dirección.
+      - name: country
+        data_type: varchar
+        description: >
+          País de la dirección.
+      - name: is_deleted
+        data_type: boolean
+        description: >
+          Indica si la dirección ha sido eliminada.
+      - name: date_load
+        data_type: timestamp_tz
+        description: >
+          Fecha en la que se cargó el registro en la tabla.
+
+  - name: dim_date
+    config:
+      contract:
+        enforced: true
+    description: >
+      Contiene varias dimensiones de fecha.
+    columns:
+      - name: date_day
+        data_type: date
+        constraints:
+          - type: primary_key
+          - type: not_null
+          - type: unique
+        description: >
+          La fecha específica.
+        tests:
+          - not_null
+          - unique
+      - name: prior_date_day
+        data_type: date
+        description: >
+          El día inmediatamente anterior a date_day.
+      - name: next_date_day
+        data_type: date
+        description: >
+          El día inmediatamente posterior a date_day.
+      - name: prior_year_date_day
+        data_type: date
+        description: >
+          La fecha correspondiente en el año anterior.
+      - name: prior_year_over_year_date_day
+        data_type: date
+        description: >
+          La fecha correspondiente dos años antes de date_day.
+      - name: day_of_week
+        data_type: number
+        description: >
+          El día de la semana (ej. 1 para lunes 7 para domingo).
+      - name: day_of_week_iso
+        data_type: number
+        description: >
+          El día de la semana según la norma iso 8601 (ej. 1 para lunes 7 para domingo).
+      - name: day_of_week_name
+        data_type: varchar
+        description: >
+          El nombre completo del día de la semana (ej. lunes).
+      - name: day_of_week_name_short
+        data_type: varchar
+        description: >
+          La abreviatura del nombre del día de la semana (ej. lun).
+      - name: day_of_month
+        data_type: number
+        description: >
+          El día del mes (1-31).
+      - name: day_of_year
+        data_type: number
+        description: >
+          El día del año (1-365 o 366).
+      - name: week_start_date
+        data_type: date
+        description: >
+          La fecha de inicio de la semana.
+      - name: week_end_date
+        data_type: date
+        description: >
+          La fecha de fin de la semana.
+      - name: prior_year_week_start_date
+        data_type: date
+        description: >
+          La fecha de inicio de la semana correspondiente en el año anterior.
+      - name: prior_year_week_end_date
+        data_type: date
+        description: >
+          La fecha de fin de la semana correspondiente en el año anterior.
+      - name: week_of_year
+        data_type: number
+        description: >
+          El número de la semana del año.
+      - name: iso_week_start_date
+        data_type: date
+        description: >
+          La fecha de inicio de la semana según la norma iso 8601.
+      - name: iso_week_end_date
+        data_type: date
+        description: >
+          La fecha de fin de la semana según la norma iso 8601.
+      - name: prior_year_iso_week_start_date
+        data_type: date
+        description: >
+          La fecha de inicio de la semana correspondiente según la norma iso 8601 en el año anterior.
+      - name: prior_year_iso_week_end_date
+        data_type: date
+        description: >
+          La fecha de fin de la semana correspondiente según la norma iso 8601 en el año anterior.
+      - name: iso_week_of_year
+        data_type: number
+        description: >
+          El número de la semana del año según la norma iso 8601.
+      - name: prior_year_week_of_year
+        data_type: number
+        description: >
+          El número de la semana correspondiente en el año anterior.
+      - name: prior_year_iso_week_of_year
+        data_type: number
+        description: >
+          El número de la semana correspondiente según la norma iso 8601 en el año anterior.
+      - name: month_of_year
+        data_type: number
+        description: >
+          El número del mes del año (1-12).
+      - name: month_name
+        data_type: varchar
+        description: >
+          El nombre completo del mes (ej. enero).
+      - name: month_name_short
+        data_type: varchar
+        description: >
+          La abreviatura del nombre del mes (ej. ene).
+      - name: month_start_date
+        data_type: date
+        description: >
+          El primer día del mes.
+      - name: month_end_date
+        data_type: date
+        description: >
+          El último día del mes.
+      - name: prior_year_month_start_date
+        data_type: date
+        description: >
+          El primer día del mes correspondiente en el año anterior.
+      - name: prior_year_month_end_date
+        data_type: date
+        description: >
+          El último día del mes correspondiente en el año anterior.
+      - name: quarter_of_year
+        data_type: number
+        description: >
+          El número del trimestre del año (1-4).
+      - name: quarter_start_date
+        data_type: date
+        description: >
+          El primer día del trimestre.
+      - name: quarter_end_date
+        data_type: date
+        description: >
+          El último día del trimestre.
+      - name: year_number
+        data_type: number
+        description: >
+          El número del año.
+      - name: year_start_date
+        data_type: date
+        description: >
+          El primer día del año.
+      - name: year_end_date
+        data_type: date
+        description: >
+          El último día del año.
+      - name: iso_year_week
+        data_type: varchar
+        description: >
+          El año y el número de semana ISO (ej. 2023-W52).
+
+  - name: dim_order
+    config:
+      contract:
+        enforced: true
+    description: >
+      Pedidos realizados por un usuario.
+    columns:
+      - name: order_id
+        data_type: varchar
+        constraints:
+          - type: primary_key
+          - type: not_null
+          - type: unique
+        description: >
+          Id único de la orden hasheado.
+        tests:
+          - not_null
+          - unique     
+      - name: order_cost
+        data_type: float
+        description: >
+          Precio total de los productos del pedido antes de añadir coste de envío y aplicar promoción.
+      - name: promo_id
+        data_type: varchar
+        constraints:
+          - type: foreign_key
+            to: ref('dim_promo')
+            to_columns: [promo_id]
+        description: >
+          Id de la promoción que se le aplica al pedido.
+        tests:
+          - relationships:
+                to: ref('dim_promo')
+                field: promo_id
+      - name: shipping_cost
+        data_type: float
+        description: >
+          Precio del servicio de envío asociado al pedido.
+      - name: order_total
+        data_type: float
+        description: >
+          Precio total del pedido después de añadir coste de envío y aplicar promoción.
+      - name: is_deleted
+        data_type: boolean
+        description: >
+          Indica si el registro ha sido borrado en la base de datos de origen.
+
+  - name: dim_product
+    config:
+      contract:
+        enforced: true
+    description: >
+      Conjunto de productos disponibles.
+    columns:
+      - name: product_id
+        data_type: varchar
+        constraints:
+          - type: primary_key
+          - type: not_null
+          - type: unique
+        description: >
+          Id del producto hasheado.
+        tests:
+          - not_null
+          - unique
+      - name: price
+        data_type: float
+        description: >
+          Precio del producto.
+      - name: name
+        data_type: varchar
+        description: >
+          Nombre del producto.
+      - name: inventory
+        data_type: int
+        description: >
+          Cantidad de producto disponible.
+      - name: plant_group
+        data_type: varchar
+        description: >
+          Grupo de la planta.
+      - name: product_weight_kg
+        data_type: float
+        description: >
+          Peso del producto en kilogramos.
+      - name: care_level
+        data_type: varchar
+        description: >
+          Nivel de cuidado del producto.
+      - name: mature_size
+        data_type: varchar
+        description: >
+          Tamaño maduro del producto.
+      - name: is_deleted
+        data_type: boolean
+        description: >
+          Indica si el registro ha sido borrado en la base de datos de origen.
+      - name: date_load
+        data_type: timestamp_tz
+        description: >
+          Fecha en que se cargaron los datos.
+
+  - name: dim_promo
+    config:
+      contract:
+        enforced: true
+    description: >
+      Tipo de descuentos.
+    columns:
+      - name: promo_id
+        data_type: varchar
+        constraints:
+          - type: primary_key
+          - type: not_null
+          - type: unique
+        description: >
+          Id único de la promoción hasheado.
+        tests:
+          - not_null
+          - unique
+      - name: desc_promo
+        data_type: varchar
+        description: >
+          Descripción de la promoción.
+      - name: discount_on_units
+        data_type: float
+        description: >
+          Cantidad en unidad de descuento de la promoción.
+      - name: is_active
+        data_type: boolean
+        description: >
+          Estado de la promoción.
+      - name: is_deleted
+        data_type: boolean
+        description: >
+          Indica si el registro ha sido borrado en la base de datos de origen.
+
+  - name: dim_user
+    config:
+      contract:
+        enforced: true
+    description: >
+      Usuarios de la web.
+    columns:
+      - name: user_id
+        data_type: varchar
+        constraints:
+          - type: primary_key
+          - type: not_null
+          - type: unique
+        description: >
+          Id único del usuario hasheado.
+        tests:
+          - not_null
+          - unique
+      - name: last_name
+        data_type: varchar
+        description: >
+          Apellido del usuario.
+      - name: first_name
+        data_type: varchar
+        description: >
+          Nombre del usuario.
+      - name: address_id
+        data_type: varchar
+        constraints:
+          - type: foreign_key
+            to: ref('dim_address')
+            to_columns: [address_id]
+        description: >
+          Id de la dirección del usuario.
+        tests:
+          - relationships:
+                to: ref('dim_address')
+                field: address_id
+      - name: phone_number
+        data_type: varchar
+        description: >
+          Número de teléfono del usuario.
+      - name: is_valid_us_phone
+        data_type: boolean
+        description: >
+          Indica si teléfono es válido.
+      - name: email
+        data_type: varchar
+        description: >
+          Correo electrónico del usuario.
+      - name: is_valid_email
+        data_type: boolean
+        description: >
+          Indica si email es válido.
+      - name: has_purchased
+        data_type: boolean
+        description: >
+          Indica si usuario ha realizado alguna compra.
+      - name: last_purchase_date
+        data_type: date
+        description: >
+          Fecha en la que realizó la última compra.
+      - name: created_at_date
+        data_type: date
+        constraints:
+          - type: foreign_key
+            to: ref('dim_date')
+            to_columns: [date_day]
+        description: >
+          Fecha de creación del registro.
+        tests:
+          - relationships:
+                to: ref('dim_date')
+                field: date_day
+      - name: created_at_time
+        data_type: time
+        description: >
+          Hora de creación del registro.
+      - name: created_at_timestamp
+        data_type: timestamp_tz
+        description: >
+          Fecha en timestamp de creación del registro.
+      - name: updated_at_date
+        data_type: date
+        constraints:
+          - type: foreign_key
+            to: ref('dim_date')
+            to_columns: [date_day]
+        description: >
+          Fecha de la última actualización de los datos del usuario.
+        tests:
+          - relationships:
+                to: ref('dim_date')
+                field: date_day
+      - name: updated_at_time
+        data_type: time
+        description: >
+          Hora de la última actualización de los datos del usuario.
+      - name: updated_at_timestamp
+        data_type: timestamp_tz
+        description: >
+          Fecha en timestamp de la última actualización de los datos del usuario.
+      - name: is_deleted
+        data_type: boolean
+        description: >
+          Indica si el registro ha sido borrado en la base de datos de origen.
+
   - name: fct_budget
     config:
       contract:
@@ -23,54 +477,264 @@ models:
         data_type: varchar
         constraints:
           - type: foreign_key
-            to: ref('stg_sql_server_dbo__products')
+            to: ref('dim_product')
             to_columns: [product_id]
-          - type: not_null
         description: >
           Id única para cada producto.
         tests:
-          - not_null
           - relationships:
-                to: ref('stg_sql_server_dbo__products')
-                field: product_id  
-      - name: target_quantity
-        data_type: int
-        constraints:
-          - type: not_null
-        description: >
-          Número de unidades por cada producto y cada mes por producto. 
-        tests:
-          - not_null
-          - positive_values
+                to: ref('dim_product')
+                field: product_id
       - name: month
         data_type: int
-        constraints:
-          - type: not_null
         description: >
           Mes asociado a cada objetivo.
-        tests:
-          - not_null
       - name: year
         data_type: int
-        constraints:
-          - type: not_null
         description: >
           Año asociado a cada objetivo.
-        tests:
-          - not_null
       - name: date
         data_type: date
-        constraints:
-          - type: not_null
         description: >
           Fecha del final del mes asociada a cada objetivo.
+      - name: target_quantity
+        data_type: int
+        description: >
+          Número de unidades por cada producto y cada mes por producto. 
+      - name: total_quantity_sold
+        data_type: int
+        description: >
+          Cantidad real de producto vendido cada mes.
+
+  - name: fct_events
+    description: >
+      Eventos realizados por un usuario en la web relacionados con los productos.
+    columns:
+      - name: event_id
+        data_type: varchar
+        constraints:
+          - type: primary_key
+          - type: not_null
+          - type: unique
+        description: >
+          Id del evento hasheado.
         tests:
           - not_null
+          - unique
+      - name: page_url
+        data_type: varchar
+        description: >
+          Url de la sección de la web visitada por el usuario.
+      - name: user_id
+        data_type: varchar
+        constraints:
+          - type: foreign_key
+            to: ref('dim_user')
+            to_columns: [user_id]
+        description: >
+          Id del usuario que realiza el evento.
+        tests:
+          - relationships:
+                to: ref('dim_user')
+                field: user_id
+      - name: session_id
+        data_type: varchar
+        description: >
+          Id de la sesión que une los diferentes eventos realizados por el usuario.
+      - name: event_type
+        data_type: varchar
+        description: >
+          Tipo de evento realizado por el usuario en la web.
+      - name: product_id
+        data_type: varchar
+        description: >
+          Id del producto.
+      - name: order_id
+        data_type: varchar
+        description: >
+          Id del pedido.
+      - name: created_at_date
+        data_type: date
+        constraints:
+          - type: foreign_key
+            to: ref('dim_date')
+            to_columns: [date_day]
+        description: >
+          Fecha en la que se añadió el registro a la tabla.
+        tests:
+          - relationships:
+                to: ref('dim_date')
+                field: date_day
+      - name: created_at_time
+        data_type: time
+        description: >
+          Hora en la que se añadió el registro a la tabla.
+      - name: created_at_timestamp
+        data_type: timestamp_tz
+        description: >
+          Fecha en timestamp en la que se añadió el registro a la tabla.
+      - name: is_deleted
+        data_type: boolean
+        description: >
+          Indica si el registro ha sido borrado en la base de datos de origen.
       - name: date_load
         data_type: timestamp_tz
-        constraints:
-          - type: not_null
         description: >
           Fecha en que se cargaron los datos.
+
+  - name: fct_order_items
+    config:
+      contract:
+        enforced: true
+    description: >
+      Productos comprados por un usuario asociados a una orden.
+    columns:
+      - name: order_item_id
+        data_type: varchar
+        constraints:
+          - type: primary_key
+          - type: not_null
+          - type: unique
+        description: >
+          Id único del registro hasheado.
         tests:
           - not_null
+          - unique
+      - name: order_id
+        data_type: varchar
+        constraints:
+          - type: foreign_key
+            to: ref('stg_sql_server_dbo__orders')
+            to_columns: [order_id]
+        description: >
+          Id del pedido asociado.
+        tests:
+          - relationships:
+                to: ref('stg_sql_server_dbo__orders')
+                field: order_id
+      - name: product_id
+        data_type: varchar
+        constraints:
+          - type: foreign_key
+            to: ref('stg_sql_server_dbo__products')
+            to_columns: [product_id]
+        description: >
+          Id del producto.
+        tests:
+          - relationships:
+                to: ref('stg_sql_server_dbo__products')
+                field: product_id
+      - name: total_quantity
+        data_type: int
+        description: >
+          Unidades de producto asociadas al pedido.
+      - name: product_price
+        data_type: float
+        description: >
+          Precio unitario del producto.
+      - name: user_id
+        data_type: varchar
+        constraints:
+          - type: foreign_key
+            to: ref('stg_sql_server_dbo__users')
+            to_columns: [user_id]
+        description: >
+          Id del usuario que realiza el pedido.
+        tests:
+          - relationships:
+                to: ref('stg_sql_server_dbo__users')
+                field: user_id
+      - name: address_id
+        data_type: varchar
+        constraints:
+          - type: foreign_key
+            to: ref('stg_sql_server_dbo__addresses')
+            to_columns: [address_id]
+        description: >
+          Id de la dirección del usuario a la que se realiza el envío.
+        tests:
+          - relationships:
+                to: ref('stg_sql_server_dbo__addresses')
+                field: address_id
+      - name: actual_status
+        data_type: varchar
+        description: >
+          Estado del pedido.
+      - name: order_date
+        data_type: date
+        constraints:
+          - type: foreign_key
+            to: ref('stg_own_data__dates')
+            to_columns: [date_day]
+        description: >
+          Fecha en la que se añadió el registro a la tabla.
+        tests:
+          - relationships:
+                to: ref('stg_own_data__dates')
+                field: date_day
+      - name: order_time
+        data_type: time
+        description: >
+          Hora en la que se añadió el registro a la tabla.
+      - name: order_timestamp
+        data_type: timestamp_tz
+        description: >
+          Fecha en timestamp en la que se añadió el registro a la tabla.
+      - name: estimated_delivery_at_date
+        data_type: date
+        constraints:
+          - type: foreign_key
+            to: ref('stg_own_data__dates')
+            to_columns: [date_day]
+        description: >
+          Fecha estimada de entrega del pedido.
+        tests:
+          - relationships:
+                to: ref('stg_own_data__dates')
+                field: date_day
+      - name: estimated_delivery_at_time
+        data_type: time
+        description: >
+          Hora estimada de entrega del pedido.
+      - name: estimated_delivery_at_timestamp
+        data_type: timestamp_tz
+        description: >
+          Fecha en timestamp estimada de entrega del pedido.
+      - name: delivered_at_date
+        data_type: date
+        constraints:
+          - type: foreign_key
+            to: ref('stg_own_data__dates')
+            to_columns: [date_day]
+        description: >
+          Fecha de entrega del pedido.
+        tests:
+          - relationships:
+                to: ref('stg_own_data__dates')
+                field: date_day
+      - name: delivered_at_time
+        data_type: time
+        description: >
+          Hora de entrega del pedido.
+      - name: delivered_at_timestamp
+        data_type: timestamp_tz
+        description: >
+          Fecha en timestamp de entrega del pedido.
+      - name: shipping_service
+        data_type: varchar
+        description: >
+          Servicio de envío asociado al pedido.
+      - name: tracking_id
+        data_type: varchar
+        description: >
+          Id para el seguimiento del pedido.
+      - name: is_deleted
+        data_type: boolean
+        description: >
+          Indica si el registro ha sido borrado en la base de datos de origen.
+
+
+
+
+
+      

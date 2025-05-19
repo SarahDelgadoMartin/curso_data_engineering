@@ -192,7 +192,7 @@ models:
         description: >
           Fecha en que se cargaron los datos.
         tests:
-          - not_null     
+          - not_null
 
   - name: stg_sql_server_dbo__order_items
     config:
@@ -508,7 +508,7 @@ models:
           Fecha en que se cargaron los datos.
         tests:
           - not_null
-
+    
   - name: stg_sql_server_dbo__products
     config:
       contract:
@@ -656,33 +656,6 @@ models:
           - type: not_null
         description: >
           Fecha en que se cargaron los datos.
-        tests:
-          - not_null
-
-  - name: stg_sql_server_dbo__shipping_services
-    config:
-      contract:
-        enforced: true
-    description: >
-      Empresas de envío.
-    columns:
-      - name: shipping_service_id
-        data_type: varchar
-        constraints:
-          - type: primary_key
-          - type: not_null
-          - type: unique
-        description: >
-          Id único de la empresa hasheado.
-        tests:
-          - not_null
-          - unique
-      - name: dec_shipping_service
-        data_type: varchar
-        constraints:
-          - type: not_null
-        description: >
-          Nombre de la empresa.
         tests:
           - not_null
 
