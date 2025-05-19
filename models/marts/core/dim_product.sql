@@ -16,7 +16,8 @@ WITH product_data AS (
         product_weight_kg,
         care_level,
         mature_size,
-        is_deleted
+        is_deleted,
+        date_load
     FROM {{ ref('stg_sql_server_dbo__products') }}
 
     {% if is_incremental() %}

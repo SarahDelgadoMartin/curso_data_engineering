@@ -28,10 +28,13 @@ final AS (
         o.status AS actual_status,
         o.created_at_date AS order_date,
         o.created_at_time AS order_time,
+        o.created_at_timestamp AS order_timestamp,
         o.estimated_delivery_at_date,
         o.estimated_delivery_at_time,
+        o.estimated_delivery_at_timestamp,
         o.delivered_at_date,
         o.delivered_at_time,
+        o.delivered_at_timestamp,
         o.shipping_service,
         o.tracking_id,
         oi.is_deleted

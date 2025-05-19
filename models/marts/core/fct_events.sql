@@ -21,6 +21,7 @@ SELECT
     order_id,
     created_at_date AS event_date,
     created_at_time AS event_time,
+    created_at_timestamp AS event_timestamp,
     is_deleted
 FROM
     events_data

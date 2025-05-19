@@ -1,67 +1,127 @@
--- models/fact_sales.sql
-
 {{
-    config(
-        materialized='table',
-        indexes=[
-            {'columns': ['sale_id']}
-        ]
-    )
-}}
+  config(
+    materialized='table'
+  )
+    }}
 
-WITH sales_data AS (
+WITH fct_order_items AS (
     SELECT
-        sale_id,
-        sale_date,
+        order_item_id,
+        order_id,
         product_id,
-        quantity,
-        unit_price,
-        customer_id
+        total_quantity,
+        product_price,
+        user_id,
+        address_id,
+        order_date,
+        order_time,
+        order_timestamp,
+        estimated_delivery_at_date,
+        estimated_delivery_at_time,
+        estimated_delivery_at_timestamp,
+        delivered_at_date,
+        delivered_at_time,
+        delivered_at_timestamp
     FROM
-        {{ ref('fct_events') }}
-),
+        {{ ref('fct_order_items') }}
+    ), 
 
--- Añadir la tabla de dimensiones para el tiempo
-dimension_time AS (
+dim_order AS (
     SELECT
-        sale_date,
-        date_trunc('month', sale_date) AS month_start,
-        date_trunc('year', sale_date) AS year_start
+        order_id,
+        promo_id,
+        shipping_cost,
+        order_total,
+        is_deleted
     FROM
-        {{ ref('dim_date') }}
-),
+        {{ ref('dim_order') }}
+    ),
 
--- Añadir la tabla de dimensiones para los productos
-dimension_products AS (
+dim_promo AS (
     SELECT
-        product_id,
-        product_name
+        promo_id,
+        discount_on_units
     FROM
-        {{ ref('dim_product') }}
-),
+        {{ ref('dim_promo') }}
 
--- Añadir la tabla de dimensiones para los clientes
-dimension_customers AS (
+    ),
+
+dim_user AS (
     SELECT
-        customer_id,
-        customer_name
+        user_id,
+        first_name,
+        last_name,
+        email,
+        is_valid_email,
+        phone_number,
+        is_valid_us_phone,
+        created_at_timestamp,
+        updated_at_timestamp,
+        address_id
     FROM
         {{ ref('dim_user') }}
-)
+    ),
+
+dim_address AS (
+    SELECT
+        address_id,
+        street,
+        number,
+        zipcode_id,
+        state,
+        country
+    FROM
+        {{ ref('dim_address') }}
+    ),
+
+user_discounts AS (
+    SELECT
+        foi.user_id,
+        SUM(COALESCE(dp.discount_on_units, 0)) AS total_discount_usd
+    FROM fct_order_items foi
+    INNER JOIN dim_order dor ON foi.order_id = dor.order_id
+    LEFT JOIN dim_promo dp ON dor.promo_id = dp.promo_id
+    GROUP BY foi.user_id
+    ),
+
+user_orders AS (
+    SELECT
+        foi.user_id,
+        COUNT(DISTINCT foi.order_id) AS total_numbers_orders,
+        SUM(dor.shipping_cost) AS total_shipping_cost_usd,
+        SUM(dor.order_total) AS total_order_cost,
+        SUM(foi.total_quantity) AS total_quantity,
+        COUNT(DISTINCT foi.product_id) AS total_different_products_buyed,
+        AVG(DATEDIFF('day', foi.order_date, foi.estimated_delivery_at_date)) AS avg_day_estimated_delivery,
+        AVG(DATEDIFF('day', foi.order_date, foi.delivered_at_date)) AS avg_day_delivered_day
+    FROM fct_order_items foi
+    INNER JOIN dim_order dor ON foi.order_id = dor.order_id
+    GROUP BY foi.user_id
+    )
 
 SELECT
-    sale_id,
-    sale_date,
-    dimension_time.month_start,
-    dimension_time.year_start,
-    dimension_products.product_name,
-    quantity,
-    unit_price,
-    dimension_customers.customer_name,
-    product_id,
-    customer_id
-FROM
-    sales_data
-    INNER JOIN dimension_time ON sales_data.sale_date = dimension_time.sale_date
-    INNER JOIN dimension_products ON sales_data.product_id = dimension_products.product_id
-    INNER JOIN dimension_customers ON sales_data.customer_id = dimension_customers.customer_id
+    du.user_id,
+    du.first_name,
+    du.last_name,
+    du.email,
+    du.is_valid_email,
+    du.phone_number,
+    du.is_valid_us_phone,
+    du.created_at_timestamp,
+    du.updated_at_timestamp,
+    da.number || ' ' || da.street AS address,
+    da.zipcode_id AS zipcode,
+    da.state,
+    da.country,
+    uo.total_numbers_orders,
+    uo.total_shipping_cost_usd,
+    uo.total_order_cost,
+    udis.total_discount_usd,
+    uo.total_quantity_products_buyed,
+    uo.total_different_products_buyed,
+    uo.avg_day_estimated_delivery,
+    uo.avg_day_delivered_day
+FROM dim_user du
+INNER JOIN user_orders uo ON du.user_id = uo.user_id
+LEFT JOIN dim_address da ON du.address_id = da.address_id
+LEFT JOIN user_discounts udis ON du.user_id = udis.user_id
