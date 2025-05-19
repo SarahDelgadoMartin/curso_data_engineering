@@ -39,10 +39,16 @@ models:
         data_type: varchar
         constraints:
           - type: not_null
+          - type: foreign_key
+            to: ref('stg_own_data__zipcode_data')
+            to_columns: [zipcode_id]
         description: >
           Id del código postal hasheado.
         tests:
           - not_null
+          - relationships:
+                to: ref('stg_own_data__zipcode_data')
+                field: zipcode_id
       - name: state
         data_type: varchar
         constraints:
