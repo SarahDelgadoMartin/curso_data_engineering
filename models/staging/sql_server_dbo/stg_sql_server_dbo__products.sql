@@ -1,20 +1,12 @@
 {{
   config(
-    materialized='incremental',
-    unique_key='product_id',
-    on_schema_change='append_new_columns'
+    materialized='view'
   )
     }}
 
 WITH base_products AS (
     SELECT * 
     FROM {{ ref('base_sql_server_dbo__products') }}
-
-    {% if is_incremental() %}
-
-	WHERE date_load > (SELECT MAX(date_load) FROM {{ this }} )
-
-    {% endif %}
     ),
 
 base_product_details AS (

@@ -1,20 +1,12 @@
 {{
   config(
-    materialized='incremental',
-    unique_key='product_id',
-    on_schema_change='append_new_columns'
+    materialized='view'
   )
     }}
 
 WITH src_products AS (
     SELECT * 
     FROM {{ source('sql_server_dbo', 'products') }}
-
-    {% if is_incremental() %}
-
-	WHERE _fivetran_synced > (SELECT MAX(date_load) FROM {{ this }} )
-
-    {% endif %}
     ),
 
 renamed_casted AS (

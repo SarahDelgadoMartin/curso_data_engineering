@@ -1,20 +1,12 @@
 {{
   config(
-    materialized='incremental',
-    unique_key='address_id',
-    on_schema_change='append_new_columns'
+    materialized='view'
   )
 }}
 
 WITH src_addresses AS (
     SELECT * 
     FROM {{ source('sql_server_dbo', 'addresses') }}
-
-    {% if is_incremental() %}
-
-	WHERE _fivetran_synced > (SELECT MAX(date_load) FROM {{ this }} )
-
-    {% endif %}
     ),
 
 renamed_casted AS (

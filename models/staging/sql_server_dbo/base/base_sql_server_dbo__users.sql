@@ -1,20 +1,12 @@
 {{
   config(
-    materialized='incremental',
-    unique_key='user_id',
-    on_schema_change='append_new_columns'
+    materialized='view'
   )
     }}
 
 WITH src_users AS (
     SELECT * 
     FROM {{ source('sql_server_dbo', 'users') }}
-    
-{% if is_incremental() %}
-
-	WHERE _fivetran_synced > (SELECT MAX(date_load) FROM {{ this }} )
-
-{% endif %}
     ),
 
 renamed_casted AS (
