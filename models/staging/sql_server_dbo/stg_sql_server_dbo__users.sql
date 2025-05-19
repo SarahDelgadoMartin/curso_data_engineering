@@ -1,20 +1,13 @@
 {{
   config(
-    materialized='incremental',
-    unique_key='user_id',
-    on_schema_change='append_new_columns'
+    materialized='view'
   )
     }}
 
 WITH base_users AS (
     SELECT * 
     FROM {{ ref('base_sql_server_dbo__users') }}
-    
-    {% if is_incremental() %}
 
-	WHERE date_load > (SELECT MAX(date_load) FROM {{ this }} )
-
-    {% endif %}
     ),
 
 renamed_casted AS (

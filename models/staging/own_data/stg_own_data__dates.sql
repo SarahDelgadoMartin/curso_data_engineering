@@ -1,8 +1,8 @@
 {{ 
-    config(
-        materialized='table'
-    )
-}}
+  config(
+    materialized='view'
+  )
+    }}
 
 {% set end_date = get_future_date(2) %}
 
