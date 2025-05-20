@@ -495,8 +495,16 @@ models:
           Año asociado a cada objetivo.
       - name: date
         data_type: date
+        constraints:
+          - type: foreign_key
+            to: ref('dim_date')
+            to_columns: [date_day]
         description: >
           Fecha del final del mes asociada a cada objetivo.
+        tests:
+          - relationships:
+                to: ref('dim_date')
+                field: date_day
       - name: target_quantity
         data_type: int
         description: >
@@ -507,6 +515,9 @@ models:
           Cantidad real de producto vendido cada mes.
 
   - name: fct_events
+    config:
+      contract:
+        enforced: true
     description: >
       Eventos realizados por un usuario en la web relacionados con los productos.
     columns:
@@ -604,25 +615,25 @@ models:
         data_type: varchar
         constraints:
           - type: foreign_key
-            to: ref('stg_sql_server_dbo__orders')
+            to: ref('dim_order')
             to_columns: [order_id]
         description: >
           Id del pedido asociado.
         tests:
           - relationships:
-                to: ref('stg_sql_server_dbo__orders')
+                to: ref('dim_order')
                 field: order_id
       - name: product_id
         data_type: varchar
         constraints:
           - type: foreign_key
-            to: ref('stg_sql_server_dbo__products')
+            to: ref('dim_product')
             to_columns: [product_id]
         description: >
           Id del producto.
         tests:
           - relationships:
-                to: ref('stg_sql_server_dbo__products')
+                to: ref('dim_product')
                 field: product_id
       - name: total_quantity
         data_type: int
@@ -636,25 +647,25 @@ models:
         data_type: varchar
         constraints:
           - type: foreign_key
-            to: ref('stg_sql_server_dbo__users')
+            to: ref('dim_user')
             to_columns: [user_id]
         description: >
           Id del usuario que realiza el pedido.
         tests:
           - relationships:
-                to: ref('stg_sql_server_dbo__users')
+                to: ref('dim_user')
                 field: user_id
       - name: address_id
         data_type: varchar
         constraints:
           - type: foreign_key
-            to: ref('stg_sql_server_dbo__addresses')
+            to: ref('dim_address')
             to_columns: [address_id]
         description: >
           Id de la dirección del usuario a la que se realiza el envío.
         tests:
           - relationships:
-                to: ref('stg_sql_server_dbo__addresses')
+                to: ref('dim_address')
                 field: address_id
       - name: actual_status
         data_type: varchar
@@ -664,13 +675,13 @@ models:
         data_type: date
         constraints:
           - type: foreign_key
-            to: ref('stg_own_data__dates')
+            to: ref('dim_date')
             to_columns: [date_day]
         description: >
           Fecha en la que se añadió el registro a la tabla.
         tests:
           - relationships:
-                to: ref('stg_own_data__dates')
+                to: ref('dim_date')
                 field: date_day
       - name: order_time
         data_type: time
@@ -684,13 +695,13 @@ models:
         data_type: date
         constraints:
           - type: foreign_key
-            to: ref('stg_own_data__dates')
+            to: ref('dim_date')
             to_columns: [date_day]
         description: >
           Fecha estimada de entrega del pedido.
         tests:
           - relationships:
-                to: ref('stg_own_data__dates')
+                to: ref('dim_date')
                 field: date_day
       - name: estimated_delivery_at_time
         data_type: time
@@ -704,13 +715,13 @@ models:
         data_type: date
         constraints:
           - type: foreign_key
-            to: ref('stg_own_data__dates')
+            to: ref('dim_date')
             to_columns: [date_day]
         description: >
           Fecha de entrega del pedido.
         tests:
           - relationships:
-                to: ref('stg_own_data__dates')
+                to: ref('dim_date')
                 field: date_day
       - name: delivered_at_time
         data_type: time

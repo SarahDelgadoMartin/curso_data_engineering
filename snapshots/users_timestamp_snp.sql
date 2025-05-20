@@ -15,9 +15,7 @@ SELECT
     first_name,
     address_id,
     phone_number,
-    is_valid_us_phone,
     email,
-    is_valid_email,
     created_at_timestamp,
     updated_at_timestamp
 FROM {{ ref('base_sql_server_dbo__users') }}
