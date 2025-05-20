@@ -361,7 +361,7 @@ models:
         constraints:
           - type: not_null
         description: >
-          Latitud aproximada del área correspondiente al código postal.
+          Longitud aproximada del área correspondiente al código postal.
         tests:
           - not_null
       - name: population
