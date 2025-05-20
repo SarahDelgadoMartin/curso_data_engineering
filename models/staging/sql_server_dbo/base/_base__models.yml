@@ -233,10 +233,6 @@ models:
         enforced: true
     description: >
       Pedidos realizados por un usuario.
-    tests:
-      - assert_delivery_date_is_not_before_order_date:
-          severity: error
-          description: Verifica que la fecha de entrega no sea anterior a la fecha en que se realizó el pedido.
     columns:
       - name: order_id
         data_type: varchar

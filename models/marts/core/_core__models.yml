@@ -27,26 +27,42 @@ models:
         data_type: int
         description: >
           Número de la calle de la dirección.
-      - name: zipcode_id
+      - name: zipcode
         data_type: varchar
         description: >
-          Id única del código postal asociado a la dirección.
+          Código postal asociado a la dirección.
+      - name: city
+        data_type: varchar
+        description: >
+          Nombre de la ciudad asociada al código postal.
       - name: state
         data_type: varchar
         description: >
           Estado de la dirección.
+      - name: state_code
+        data_type: varchar
+        description: >
+          Código del estado de la dirección.
       - name: country
         data_type: varchar
         description: >
           País de la dirección.
+      - name: zipcode_latitude
+        data_type: float
+        description: >
+          Latitud aproximada del área correspondiente al código postal.
+      - name: zipcode_longitude
+        data_type: float
+        description: >
+          Longitud aproximada del área correspondiente al código postal.
+      - name: zipcode_population
+        data_type: int
+        description: >
+          Población aproximada del área correspondiente al código postal.
       - name: is_deleted
         data_type: boolean
         description: >
           Indica si la dirección ha sido eliminada.
-      - name: date_load
-        data_type: timestamp_tz
-        description: >
-          Fecha en la que se cargó el registro en la tabla.
 
   - name: dim_date
     config:
@@ -564,7 +580,7 @@ models:
         data_type: varchar
         description: >
           Id del pedido.
-      - name: created_at_date
+      - name: event_date
         data_type: date
         constraints:
           - type: foreign_key
@@ -576,11 +592,11 @@ models:
           - relationships:
                 to: ref('dim_date')
                 field: date_day
-      - name: created_at_time
+      - name: event_time
         data_type: time
         description: >
           Hora en la que se añadió el registro a la tabla.
-      - name: created_at_timestamp
+      - name: event_timestamp
         data_type: timestamp_tz
         description: >
           Fecha en timestamp en la que se añadió el registro a la tabla.
@@ -743,9 +759,3 @@ models:
         data_type: boolean
         description: >
           Indica si el registro ha sido borrado en la base de datos de origen.
-
-
-
-
-
-      

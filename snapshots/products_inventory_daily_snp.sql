@@ -1,5 +1,5 @@
 {% snapshot products_inventory_daily_snp %}
--- Historificar inventario por día para saber la cantidad que hay(product_id,fecha,cantidad) Nueva tabla???
+-- Historificar inventario por día para saber la cantidad que hay
 {{
   config(
     target_schema='snapshots',

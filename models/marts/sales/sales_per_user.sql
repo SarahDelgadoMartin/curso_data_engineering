@@ -67,7 +67,7 @@ dim_address AS (
         address_id,
         street,
         number,
-        zipcode_id,
+        zipcode,
         state,
         country
     FROM
@@ -88,12 +88,18 @@ user_orders AS (
     SELECT
         foi.user_id,
         COUNT(DISTINCT foi.order_id) AS total_numbers_orders,
-        SUM(dor.shipping_cost) AS total_shipping_cost_usd,
-        SUM(dor.order_total) AS total_order_cost,
-        SUM(foi.total_quantity) AS total_quantity,
+        ROUND(SUM(dor.shipping_cost), 2) AS total_shipping_cost_usd,
+        ROUND(SUM(dor.order_total), 2) AS total_order_cost,
+        SUM(foi.total_quantity) AS total_quantity_products_buyed,
         COUNT(DISTINCT foi.product_id) AS total_different_products_buyed,
-        AVG(DATEDIFF('day', foi.order_date, foi.estimated_delivery_at_date)) AS avg_day_estimated_delivery,
-        AVG(DATEDIFF('day', foi.order_date, foi.delivered_at_date)) AS avg_day_delivered_day
+        ROUND(AVG(CASE
+                    WHEN foi.estimated_delivery_at_date = '9999-12-31' THEN NULL
+                    ELSE DATEDIFF('day', foi.order_date, foi.estimated_delivery_at_date)
+                END), 2) AS avg_day_estimated_delivery,
+        ROUND(AVG(CASE 
+                    WHEN foi.delivered_at_date = '9999-12-31' THEN NULL
+                    ELSE DATEDIFF('day', foi.order_date, foi.delivered_at_date)
+                END), 2) AS avg_day_delivered_day,
     FROM fct_order_items foi
     INNER JOIN dim_order dor ON foi.order_id = dor.order_id
     GROUP BY foi.user_id
@@ -110,7 +116,7 @@ SELECT
     du.created_at_timestamp,
     du.updated_at_timestamp,
     da.number || ' ' || da.street AS address,
-    da.zipcode_id AS zipcode,
+    da.zipcode_id,
     da.state,
     da.country,
     uo.total_numbers_orders,
