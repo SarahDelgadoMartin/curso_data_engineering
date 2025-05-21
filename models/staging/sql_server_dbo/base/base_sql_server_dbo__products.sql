@@ -12,8 +12,8 @@ WITH src_products AS (
 renamed_casted AS (
     SELECT
         {{ dbt_utils.generate_surrogate_key(['product_id']) }} AS product_id,
-        CAST(REPLACE(REPLACE(price, ',', '.'), ' ', '') AS FLOAT) AS price,
-        CAST(name AS VARCHAR) AS name,
+        CAST(REPLACE(REPLACE(price, ',', '.'), ' ', '') AS FLOAT) AS product_price,
+        CAST(name AS VARCHAR) AS product_name,
         CAST(inventory AS INT) AS inventory,
         CAST(IFNULL(_fivetran_deleted, FALSE) AS BOOLEAN) AS is_deleted,
         CONVERT_TIMEZONE('UTC', CAST(_fivetran_synced AS TIMESTAMP_TZ)) AS date_load

@@ -1,9 +1,3 @@
-{{
-  config(
-    materialized='table',
-  )
-    }}
-
 WITH address_data AS (
     SELECT 
         address_id,

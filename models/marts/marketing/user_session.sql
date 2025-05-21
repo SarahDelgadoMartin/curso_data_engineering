@@ -1,9 +1,3 @@
-{{
-  config(
-    materialized='table'
-  )
-    }}
-
 WITH fct_event AS (
     SELECT
         event_id,
@@ -11,8 +5,7 @@ WITH fct_event AS (
         user_id,
         event_type,
         event_timestamp
-    FROM
-        {{ ref('fct_events') }}
+    FROM {{ ref('fct_events') }}
     ),
 
 dim_user AS (
@@ -20,8 +13,7 @@ dim_user AS (
         user_id,
         first_name,
         email
-    FROM
-        {{ ref('dim_user') }}
+    FROM {{ ref('dim_user') }}
     ),
 
 session_metrics AS (

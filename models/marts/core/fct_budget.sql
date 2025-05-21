@@ -12,8 +12,7 @@ WITH budget_data AS (
         year,
         date,
         target_quantity
-    FROM
-        {{ ref('stg_google_sheets__budget') }}
+    FROM {{ ref('stg_google_sheets__budget') }}
     ),
 
 order_data AS (
@@ -36,7 +35,7 @@ dates AS (
         date_day,
         month_of_year,
         year_number
-    FROM ALUMNO30_DEV_SILVER_DB.OWN_DATA.STG_OWN_DATA__DATES
+    FROM {{ ref('stg_own_data__dates') }}
     ),
 
 monthly_sales AS (
@@ -54,9 +53,9 @@ monthly_sales AS (
 SELECT
     bd.budget_id,
     bd.product_id,
-    bd.month,
-    bd.year,
-    bd.date,
+    bd.month AS budget_month,
+    bd.year AS budget_year,
+    bd.date AS budget_date,
     bd.target_quantity,
     ms.total_quantity_sold,
 FROM budget_data bd

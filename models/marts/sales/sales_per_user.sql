@@ -22,8 +22,7 @@ WITH fct_order_items AS (
         delivered_at_date,
         delivered_at_time,
         delivered_at_timestamp
-    FROM
-        {{ ref('fct_order_items') }}
+    FROM {{ ref('fct_order_items') }}
     ), 
 
 dim_order AS (
@@ -33,16 +32,14 @@ dim_order AS (
         shipping_cost,
         order_total,
         is_deleted
-    FROM
-        {{ ref('dim_order') }}
+    FROM {{ ref('dim_order') }}
     ),
 
 dim_promo AS (
     SELECT
         promo_id,
         discount_on_units
-    FROM
-        {{ ref('dim_promo') }}
+    FROM {{ ref('dim_promo') }}
 
     ),
 
@@ -58,8 +55,7 @@ dim_user AS (
         created_at_timestamp,
         updated_at_timestamp,
         address_id
-    FROM
-        {{ ref('dim_user') }}
+    FROM {{ ref('dim_user') }}
     ),
 
 dim_address AS (
@@ -70,8 +66,7 @@ dim_address AS (
         zipcode,
         state,
         country
-    FROM
-        {{ ref('dim_address') }}
+    FROM {{ ref('dim_address') }}
     ),
 
 user_discounts AS (
@@ -116,7 +111,7 @@ SELECT
     du.created_at_timestamp,
     du.updated_at_timestamp,
     da.number || ' ' || da.street AS address,
-    da.zipcode_id,
+    da.zipcode,
     da.state,
     da.country,
     uo.total_numbers_orders,

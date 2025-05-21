@@ -1,16 +1,14 @@
 {{
   config(
-    materialized='incremental',
-    unique_key='product_id',
-    on_schema_change='append_new_columns'
+    materialized='table'
   )
     }}
 
 WITH product_data AS (
     SELECT 
         product_id,
-        price,
-        name,
+        product_price,
+        product_name,
         inventory,
         plant_group,
         product_weight_kg,
