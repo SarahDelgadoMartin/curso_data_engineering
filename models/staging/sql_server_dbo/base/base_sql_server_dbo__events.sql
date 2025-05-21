@@ -2,7 +2,7 @@
   config(
     materialized='incremental',
     unique_key='event_id',
-    on_schema_change='append_new_columns'
+    on_schema_change='fail'
   )
     }}
 
@@ -10,11 +10,11 @@ WITH src_events AS (
     SELECT * 
     FROM {{ source('sql_server_dbo', 'events') }}
 
-{% if is_incremental() %}
+    {% if is_incremental() %}
 
 	WHERE _fivetran_synced > (SELECT MAX(date_load) FROM {{ this }} )
 
-{% endif %}
+    {% endif %}
     ),
 
 renamed_casted AS (

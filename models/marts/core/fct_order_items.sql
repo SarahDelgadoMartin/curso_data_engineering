@@ -1,19 +1,31 @@
 {{
   config(
-    materialized='table'
+    materialized='incremental',
+    unique_key='order_item_id',
+    on_schema_change='append_new_columns'
   )
     }}
 
 WITH order_items_data AS (
-    SELECT
-        *
+    SELECT *
     FROM {{ ref('stg_sql_server_dbo__order_items') }}
+
+    {% if is_incremental() %}
+
+	WHERE date_load > (SELECT MAX(date_load) FROM {{ this }} )
+    
+    {% endif %}
     ),
 
 orders_data AS (
-    SELECT
-        *
+    SELECT *
     FROM {{ ref('stg_sql_server_dbo__orders') }}
+
+    {% if is_incremental() %}
+
+	WHERE date_load > (SELECT MAX(date_load) FROM {{ this }} )
+    
+    {% endif %}
     ),
 
 final AS (
@@ -37,7 +49,8 @@ final AS (
         o.delivered_at_timestamp,
         o.shipping_service,
         o.tracking_id,
-        oi.is_deleted
+        oi.is_deleted,
+        date_load
     FROM order_items_data oi
     INNER JOIN orders_data o ON oi.order_id = o.order_id
     )

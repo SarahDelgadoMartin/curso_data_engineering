@@ -2,7 +2,7 @@
   config(
     materialized='incremental',
     unique_key='event_id',
-    on_schema_change='append_new_columns'
+    on_schema_change='fail'
   )
     }}
 
