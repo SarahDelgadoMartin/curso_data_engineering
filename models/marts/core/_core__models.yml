@@ -292,11 +292,11 @@ models:
         tests:
           - not_null
           - unique
-      - name: price
+      - name: product_price
         data_type: float
         description: >
           Precio del producto.
-      - name: name
+      - name: product_name
         data_type: varchar
         description: >
           Nombre del producto.
@@ -501,15 +501,15 @@ models:
           - relationships:
                 to: ref('dim_product')
                 field: product_id
-      - name: month
+      - name: budget_month
         data_type: int
         description: >
           Mes asociado a cada objetivo.
-      - name: year
+      - name: budget_year
         data_type: int
         description: >
           Año asociado a cada objetivo.
-      - name: date
+      - name: budget_date
         data_type: date
         constraints:
           - type: foreign_key

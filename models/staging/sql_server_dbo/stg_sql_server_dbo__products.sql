@@ -17,8 +17,8 @@ base_product_details AS (
 renamed_casted AS (
     SELECT
         bp.product_id,
-        bp.price,
-        bp.name,
+        bp.product_price,
+        bp.product_name,
         bp.inventory,
         bpd.plant_group,
         bpd.product_weight_kg,

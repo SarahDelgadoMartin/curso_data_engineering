@@ -1,25 +1,27 @@
 -- Tiempos de Entrega por Servicio de Envío
+{{
+  config(
+    materialized='table'
+  )
+    }}
+    
 WITH delivered_orders AS (
     SELECT
-        order_id,
+        DISTINCT order_id,
         order_date,
         delivered_at_date,
         order_timestamp,
         delivered_at_timestamp,
         shipping_service
-    FROM
-        YOUR_SCHEMA.fct_order_items
-    WHERE
-        delivered_at_date IS NOT NULL
-)
+    FROM {{ ref('fct_order_items') }}
+    WHERE delivered_at_date != '9999-12-31'
+    )
+
 SELECT
     shipping_service,
-    AVG(DATEDIFF(day, order_date, delivered_at_date)) AS average_delivery_days,
-    AVG(DATEDIFF(hour, order_timestamp, delivered_at_timestamp)) AS average_delivery_hours,
-    COUNT(DISTINCT order_id) AS total_orders
-FROM
-    delivered_orders
-GROUP BY
-    shipping_service
-ORDER BY
-    average_delivery_days;
+    ROUND(AVG(DATEDIFF('day', order_date, delivered_at_date)), 2) AS average_delivery_days,
+    ROUND(AVG(DATEDIFF('hour', order_timestamp, delivered_at_timestamp)), 2) AS average_delivery_hours,
+    COUNT(order_id) AS total_orders
+FROM delivered_orders
+GROUP BY shipping_service
+ORDER BY average_delivery_days
