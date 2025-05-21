@@ -30,6 +30,5 @@ SELECT
     created_at_timestamp AS event_timestamp,
     is_deleted,
     date_load
-FROM
-    events_data
+FROM events_data
     
