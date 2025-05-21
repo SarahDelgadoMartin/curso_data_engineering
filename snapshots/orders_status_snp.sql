@@ -1,4 +1,4 @@
-{% snapshot orders_check_snp %}
+{% snapshot orders_status_snp %}
 -- Historificar estado de los pedidos
 {{
   config(
@@ -10,8 +10,7 @@
 
 SELECT 
     order_id,
-    status,
-    date_load
+    status
 FROM {{ ref('base_sql_server_dbo__orders') }}
 
 {% endsnapshot %}

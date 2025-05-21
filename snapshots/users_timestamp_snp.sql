@@ -1,11 +1,10 @@
 {% snapshot users_timestamp_snp %}
-
+-- Historificar los cambios en los datos del usuario en el tiempo
 {{
   config(
     unique_key='user_id',
     strategy='timestamp',
-    updated_at='updated_at_timestamp',
-    hard_deletes='invalidate',
+    updated_at='updated_at_timestamp'
   )
     }}
 

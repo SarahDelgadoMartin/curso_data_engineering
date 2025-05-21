@@ -1,5 +1,5 @@
 {% snapshot products_inventory_daily_snp %}
--- Historificar inventario por día para saber la cantidad que hay
+-- Historificar inventario por día para saber la cantidad que hay en el tiempo
 {{
   config(
     target_schema='snapshots',
@@ -11,7 +11,6 @@
 
 SELECT
     product_id,
-    date_load,
     inventory
 FROM {{ ref('base_sql_server_dbo__products') }}
 
