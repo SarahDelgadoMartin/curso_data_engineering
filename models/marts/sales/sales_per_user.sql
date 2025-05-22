@@ -1,6 +1,7 @@
+-- !! SIN TERMINAR !!
 {{
   config(
-    materialized='table'
+    enabled=false
   )
     }}
 

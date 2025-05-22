@@ -1,0 +1,7 @@
+version: 2
+
+models:
+  - name: mature_size_popupulation_sales
+  - name: popularity_mature_size_product
+  - name: popularity_profit_by_plant_group
+  - name: sales_by_care_level_and_population

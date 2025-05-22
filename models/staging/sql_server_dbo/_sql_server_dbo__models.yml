@@ -281,33 +281,6 @@ models:
         tests:
           - not_null
 
-  - name: stg_sql_server_dbo__order_status
-    config:
-      contract:
-        enforced: true
-    description: >
-      Contiene los estados de los pedidos.
-    columns:
-      - name: order_status_id
-        data_type: varchar
-        constraints:
-          - type: primary_key
-          - type: not_null
-          - type: unique
-        description: >
-          Id único para el estado del pedido.
-        tests:
-          - not_null
-          - unique
-      - name: desc_status
-        data_type: varchar
-        constraints:
-          - type: not_null
-        description: >
-          Descripción del estado del pedido.
-        tests:
-          - not_null
-
   - name: stg_sql_server_dbo__orders
     config:
       contract:

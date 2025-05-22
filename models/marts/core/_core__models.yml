@@ -273,6 +273,10 @@ models:
         data_type: boolean
         description: >
           Indica si el registro ha sido borrado en la base de datos de origen.
+      - name: date_load
+        data_type: timestamp_tz
+        description: >
+          Fecha en la que se cargó el registro.
 
   - name: dim_product
     config:
@@ -324,10 +328,6 @@ models:
         data_type: boolean
         description: >
           Indica si el registro ha sido borrado en la base de datos de origen.
-      - name: date_load
-        data_type: timestamp_tz
-        description: >
-          Fecha en que se cargaron los datos.
 
   - name: dim_promo
     config:
@@ -759,3 +759,7 @@ models:
         data_type: boolean
         description: >
           Indica si el registro ha sido borrado en la base de datos de origen.
+      - name: date_load
+        data_type: timestamp_tz
+        description: >
+          Fecha en la que se cargó el registro.

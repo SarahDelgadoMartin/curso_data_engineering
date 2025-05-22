@@ -1,13 +1,19 @@
--- Patrones de Compra de Clientes
+-- Patrones de Compra de Clientes !! SIN TERMINAR !!
+{{
+  config(
+    enabled=false
+  )
+    }}
+
 WITH user_purchase_data AS (
     SELECT
-        foi.user_id,
-        foi.order_id,
-        foi.total_quantity,
-        foi.product_price
-    FROM
-        YOUR_SCHEMA.fct_order_items foi
-),
+        user_id,
+        order_id,
+        total_quantity,
+        product_price
+    FROM {{ ref('fct_order_items') }}
+    ),
+
 user_info AS (
     SELECT
         user_id,
@@ -15,9 +21,9 @@ user_info AS (
         last_name,
         last_purchase_date,
         has_purchased
-    FROM
-        YOUR_SCHEMA.dim_user
-)
+    FROM {{ ref('dim_user') }}
+    )
+
 SELECT
     ui.user_id,
     ui.first_name,

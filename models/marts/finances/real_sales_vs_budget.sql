@@ -8,8 +8,8 @@
 WITH budget_and_sales AS (
     SELECT
         product_id,
-        year AS budget_year,
-        month AS budget_month,
+        budget_year,
+        budget_month,
         target_quantity,
         total_quantity_sold AS actual_quantity_sold
     FROM {{ ref('fct_budget') }}
@@ -18,7 +18,7 @@ WITH budget_and_sales AS (
 product_names AS (
     SELECT
         product_id,
-        name AS product_name
+        product_name
     FROM {{ ref('dim_product') }}
     )
 

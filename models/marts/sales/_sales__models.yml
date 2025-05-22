@@ -1,0 +1,5 @@
+version: 2
+
+models:
+  - name: promo_performance
+  - name: sales_by_population_density

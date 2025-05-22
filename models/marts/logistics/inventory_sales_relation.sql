@@ -1,7 +1,7 @@
--- Relación Inventario-Ventas
+-- Relación Inventario-Ventas !! SIN TERMINAR !!
 {{
   config(
-    materialized='table'
+    enabled=false
   )
     }}
     

@@ -1,7 +1,7 @@
--- Análisis de Clientes por Ciudad
+-- Análisis de Clientes por Ciudad !! SIN TERMINAR !!
 {{
   config(
-    materialized='table'
+    enabled=false
   )
     }}
 
