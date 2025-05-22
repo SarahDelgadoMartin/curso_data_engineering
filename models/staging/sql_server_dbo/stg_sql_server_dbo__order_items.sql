@@ -20,7 +20,7 @@ WITH base_order_items AS (
 base_product AS (
     SELECT 
         product_id,
-        price
+        product_price
     FROM {{ ref('base_sql_server_dbo__products') }}
 ),
 
@@ -30,7 +30,7 @@ final AS (
         boi.order_id,
         boi.product_id,
         boi.total_quantity,
-        bp.price AS product_price,
+        bp.product_price,
         boi.is_deleted,
         boi.date_load
     FROM base_order_items boi

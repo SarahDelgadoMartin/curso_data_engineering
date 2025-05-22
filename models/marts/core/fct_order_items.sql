@@ -50,7 +50,7 @@ final AS (
         o.shipping_service,
         o.tracking_id,
         oi.is_deleted,
-        date_load
+        oi.date_load
     FROM order_items_data oi
     INNER JOIN orders_data o ON oi.order_id = o.order_id
     )

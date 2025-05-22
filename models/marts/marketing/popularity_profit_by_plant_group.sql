@@ -1,6 +1,4 @@
--- Demanda y Rentabilidad por Grupo de Plantas
--- Pregunta: ¿Qué grupos de plantas son los más populares o los que generan mayores ingresos? ¿Hay grupos que, a pesar de su bajo volumen de ventas, tienen un alto margen de beneficio?
--- Utilidad: Identificar los productos estrella o los que necesitan más promoción. Ajustar el inventario y las campañas de marketing para enfocarse en los grupos más rentables o de mayor demanda.
+-- Popularidad y ganancia por Grupo de Plantas
 WITH order_item_details AS (
     SELECT
         product_id,

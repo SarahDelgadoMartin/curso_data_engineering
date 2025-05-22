@@ -1,0 +1,8 @@
+version: 2
+
+models:
+  - name: delivery_times_shipping_service
+  - name: impact_weight_product_delivery_time
+  - name: order_concentration_by_area
+  - name: order_status
+  

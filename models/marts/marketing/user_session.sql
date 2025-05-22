@@ -22,7 +22,7 @@ session_metrics AS (
         user_id,
         MIN(event_timestamp) AS first_event_time_utc,
         MAX(event_timestamp) AS last_event_time_utc,
-        DATEDIFF('minute', MIN(event_timestamp), MAX(event_timestamp)) AS session_lenght_minutes,
+        DATEDIFF(minute, MIN(event_timestamp), MAX(event_timestamp)) AS session_lenght_minutes,
         SUM(CASE 
                 WHEN event_type = 'page_view' THEN 1
                 ELSE 0

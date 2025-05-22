@@ -24,21 +24,13 @@ WITH user_data AS (
     FROM {{ ref('stg_sql_server_dbo__users') }}
     ),
 
-order_data AS (
-    SELECT
-        order_id,
-        user_id,
-        created_at_timestamp
-    FROM {{ ref('stg_sql_server_dbo__orders') }}
-    ),
-
 last_order_data AS (
     SELECT
         user_id,
-        CAST(MAX(created_at_timestamp) AS DATE) AS last_purchase_date
-    FROM order_data
+        MAX(created_at_date) AS last_purchase_date
+    FROM {{ ref('stg_sql_server_dbo__orders') }}
     GROUP BY user_id
-)
+    )
     
 SELECT
     ud.user_id,

@@ -2,75 +2,46 @@ version: 2
 
 models:
   - name: base_sql_server_dbo__addresses
-    config:
-      contract:
-        enforced: true
     description: >
       Direcciones de entrega de los pedidos.
     columns:
       - name: address_id
-        data_type: varchar
-        constraints:
-          - type: primary_key
-          - type: not_null
-          - type: unique
         description: >
           Id del registro hasheado.
         tests:
           - not_null
           - unique 
       - name: street
-        data_type: varchar
-        constraints:
-          - type: not_null
         description: >
           Vía de la vivienda.
         tests:
           - not_null
       - name: number
-        data_type: int
-        constraints:
-          - type: not_null
         description: >
           Número de la vivienda.
         tests:
           - not_null
       - name: zipcode
-        data_type: varchar
-        constraints:
-          - type: not_null
         description: >
           Código postal.
         tests:
           - not_null
       - name: state
-        data_type: varchar
-        constraints:
-          - type: not_null
         description: >
           Estado (Localización).
         tests:
           - not_null
       - name: country
-        data_type: varchar
-        constraints:
-          - type: not_null
         description: >
           País.
         tests:
           - not_null
       - name: is_deleted
-        data_type: boolean
-        constraints:
-          - type: not_null
         description: >
           Indica si el registro ha sido borrado en la base de datos de origen.
         tests:
           - not_null
       - name: date_load
-        data_type: timestamp_tz
-        constraints:
-          - type: not_null
         description: >
           Fecha en que se cargaron los datos.
         tests:
@@ -356,206 +327,93 @@ models:
         tests:
           - not_null
   
-  - name: base_sql_server_dbo__product_details
-    config:
-      contract:
-        enforced: true
-    description: >
-      Conjunto de productos disponibles.
-    columns:
-      - name: product_id
-        data_type: varchar
-        constraints:
-          - type: primary_key
-          - type: not_null
-          - type: unique
-        description: >
-          Id del producto hasheado.
-        tests:
-          - not_null
-          - unique
-      - name: plant_group
-        data_type: varchar
-        constraints:
-          - type: not_null
-        description: >
-          Grupo al que pertenece la planta.
-        tests:
-          - not_null
-      - name: product_weight_kg
-        data_type: float
-        constraints:
-          - type: not_null
-        description: >
-          Peso del producto en kilogramos.
-        tests:
-          - not_null
-      - name: care_level
-        data_type: varchar
-        constraints:
-          - type: not_null
-        description: >
-          Nivel de cuidados que requiere la planta.
-        tests:
-          - not_null
-          - accepted_values:
-              values: ['beginner', 'intermediate', 'expert']
-      - name: mature_size
-        data_type: varchar
-        constraints:
-          - type: not_null
-        description: >
-          Tamaño al que llega la planta al terminar de crecer.
-        tests:
-          - not_null
-          - accepted_values:
-              values: ['small', 'medium', 'large']
-
   - name: base_sql_server_dbo__products
-    config:
-      contract:
-        enforced: true
     description: >
       Conjunto de productos disponibles.
     columns:
       - name: product_id
-        data_type: varchar
-        constraints:
-          - type: primary_key
-          - type: not_null
-          - type: unique
         description: >
           Id del producto hasheado.
         tests:
           - not_null
           - unique
       - name: product_price
-        data_type: float
-        constraints:
-          - type: not_null
         description: >
           Precio del producto.
         tests:
           - not_null
       - name: product_name
-        data_type: varchar
-        constraints:
-          - type: not_null
         description: >
           Nombre del producto.
         tests:
           - not_null
       - name: inventory
-        data_type: int
-        constraints:
-          - type: not_null
         description: >
           Cantidad de producto disponible.
         tests:
           - not_null
       - name: is_deleted
-        data_type: boolean
-        constraints:
-          - type: not_null
         description: >
           Indica si el registro ha sido borrado en la base de datos de origen.
         tests:
           - not_null
       - name: date_load
-        data_type: timestamp_tz
-        constraints:
-          - type: not_null
         description: >
           Fecha en que se cargaron los datos.
         tests:
           - not_null
 
   - name: base_sql_server_dbo__users
-    config:
-      contract:
-        enforced: true
     description: >
       Usuarios de la web.
     columns:
       - name: user_id
-        data_type: varchar
-        constraints:
-          - type: primary_key
-          - type: not_null
-          - type: unique
         description: >
           Id único del usuario hasheado.
         tests:
           - not_null
           - unique
       - name: last_name
-        data_type: varchar
-        constraints:
-          - type: not_null
         description: >
           Apellido del usuario.
         tests:
           - not_null
       - name: first_name
-        data_type: varchar
-        constraints:
-          - type: not_null
         description: >
           Nombre del usuario.
         tests:
           - not_null
       - name: address_id
-        data_type: varchar
-        constraints:
-          - type: not_null
         description: >
           Id de la dirección del usuario.
         tests:
           - not_null
       - name: phone_number
-        data_type: varchar
-        constraints:
-          - type: not_null
         description: >
           Número de teléfono del usuario.
         tests:
           - not_null
       - name: email
-        data_type: varchar
-        constraints:
-          - type: not_null
         description: >
           Correo electrónico del usuario.
         tests:
           - not_null
       - name: created_at_timestamp
-        data_type: timestamp_tz
-        constraints:
-          - type: not_null
         description: >
           Fecha de creación del registro.
         tests:
           - not_null
       - name: updated_at_timestamp
-        data_type: timestamp_tz
-        constraints:
-          - type: not_null
         description: >
           Fecha de la última actualización de los datos del usuario.
         tests:
           - not_null
       - name: is_deleted
-        data_type: boolean
-        constraints:
-          - type: not_null
         description: >
           Indica si el registro ha sido borrado en la base de datos de origen.
         tests:
           - not_null
       - name: date_load
-        data_type: timestamp_tz
-        constraints:
-          - type: not_null
         description: >
           Fecha en que se cargaron los datos.
         tests:
