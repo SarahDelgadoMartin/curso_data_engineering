@@ -36,7 +36,7 @@ Simular un flujo completo de datos en un entorno controlado, aplicando buenas pr
 ## 📓 Notebooks y scripts relevantes
 
 - 📘 [Ingesta incremental (Google Colab)](https://colab.research.google.com/drive/1cu5UXXt1PmP8xRNmWCegkAhwUUG0Jexg?usp=sharing)
-- 📄 [`carga_inicial.sql`](./data/script_ingesta.sql) – Script SQL para cargar datos iniciales en Snowflake
+- 📄 [`script_ingesta.sql`](./data/script_ingesta.sql) – Script SQL para cargar datos iniciales en Snowflake
 
 ---
 
