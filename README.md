@@ -25,7 +25,7 @@ Simular un flujo completo de datos en un entorno controlado, aplicando buenas pr
 
 - ✅ Ingesta incremental simulada desde Python
 - ✅ Uso de `snapshots` para mantener historial de cambios
-- ✅ Modelo de capas (Medallion): staging → intermediate → marts
+- ✅ Modelo de capas (Medallion): Bronze (sources) → Silver (staging) → Gold (marts)
 - ✅ Implementación de `tests` en dbt: unicidad, nulos, relaciones
 - ✅ Tablas incrementales para eficiencia y ahorro de costes
 - ✅ Documentación generada con `dbt docs`
