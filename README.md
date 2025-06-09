@@ -64,7 +64,7 @@ O consultarla directamente desde dbt Cloud si estás autenticado.
 
 # 🎥 Presentación del proyecto
 
-🎬 [Ingesta incremental (Enlace a publicación en LinkedIn)](https)
+🎬 [Enlace a publicación en LinkedIn](https://www.linkedin.com/posts/sarah-delgado-martin-934667142_dataengineering-dbt-snowflake-activity-7337750305746354176-HeU3)
 
 ---
 
